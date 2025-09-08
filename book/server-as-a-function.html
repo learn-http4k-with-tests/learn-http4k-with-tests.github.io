@@ -570,25 +570,25 @@ pre.rouge .gs {
 </li>
 <li><a href="fundamentals].html">I: The Fundamentals of Http4k</a>
 <ul class="sectlevel1">
-<li><a href="server-as-a-function.html"><span class="toc-current">3. Server as a Function</span></a>
+<li><a href="server-as-a-function.html"><span class="toc-current">4. Server as a Function</span></a>
 <ul class="sectlevel2">
-<li><a href="server-as-a-function.html#_request_response_and_httphandler">3.1. Request, Response and HttpHandler</a>
+<li><a href="server-as-a-function.html#_request_response_and_httphandler">4.1. Request, Response and HttpHandler</a>
 </li>
-<li><a href="server-as-a-function.html#_running_our_app_in_a_server">3.2. Running our App in a Server</a>
+<li><a href="server-as-a-function.html#_running_our_app_in_a_server">4.2. Running our App in a Server</a>
 </li>
-<li><a href="server-as-a-function.html#_testing_our_app">3.3. Testing our App</a>
+<li><a href="server-as-a-function.html#_testing_our_app">4.3. Testing our App</a>
 </li>
-<li><a href="server-as-a-function.html#_immutability">3.4. Immutability</a>
+<li><a href="server-as-a-function.html#_immutability">4.4. Immutability</a>
 </li>
 </ul>
 </li>
-<li><a href="lenses.html">4. Headers and Lenses</a>
+<li><a href="lenses.html">5. Headers and Lenses</a>
 </li>
-<li><a href="routing.html">5. Routing</a>
+<li><a href="routing.html">6. Routing</a>
 </li>
-<li><a href="filters-and-stacks.html">6. Filters and stacks</a>
+<li><a href="filters-and-stacks.html">7. Filters and stacks</a>
 </li>
-<li><a href="application-structure.html">7. Http4k Application Structure</a>
+<li><a href="application-structure.html">8. Http4k Application Structure</a>
 </li>
 </ul>
 </li>
@@ -599,10 +599,10 @@ pre.rouge .gs {
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="server-as-a-function">3. Server as a Function</h2>
+<h2 id="server-as-a-function">4. Server as a Function</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_request_response_and_httphandler">3.1. Request, Response and HttpHandler</h3>
+<h3 id="_request_response_and_httphandler">4.1. Request, Response and HttpHandler</h3>
 <div class="paragraph">
 <p>Let&#8217;s jump straight in. Here&#8217;s "Hello World" in http4k:</p>
 </div>
@@ -635,7 +635,7 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_running_our_app_in_a_server">3.2. Running our App in a Server</h3>
+<h3 id="_running_our_app_in_a_server">4.2. Running our App in a Server</h3>
 <div class="paragraph">
 <p>To run our application, we need to launch it in a Server. A Server exposes the app on the network and translates between on-the-wire HTTP communication and http4k&#8217;s "server as a function" model. The http-core module contains a server implementation that uses the HttpServer class of the JDK, but that&#8217;s only suitable for local development and experiments. For production use, you can choose one of the server modules listed at <a href="https://www.http4k.org/ecosystem/http4k/reference/servers/" class="bare">https://www.http4k.org/ecosystem/http4k/reference/servers/</a> that is a good fit for your production environment.  In this book we will use Jetty with Java&#8217;s virtual threads.</p>
 </div>
@@ -670,16 +670,16 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="paragraph">
-<p>Passing port zero to the JettyLoom server configuration makes the server use a free port allocated by the operating system, so the port number you will see when you run the server will probably be different to the one in the screenshot. We will look at how to configure the port (and other properties of our application) in <a href="configuration.html">Chapter 10, <em>Configuration</em></a>.</p>
+<p>Passing port zero to the JettyLoom server configuration makes the server use a free port allocated by the operating system, so the port number you will see when you run the server will probably be different to the one in the screenshot. We will look at how to configure the port (and other properties of our application) in <a href="configuration.html">Chapter 11, <em>Configuration</em></a>.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_testing_our_app">3.3. Testing our App</h3>
+<h3 id="_testing_our_app">4.3. Testing our App</h3>
 <div class="paragraph">
 <p>An http4k app is just a function, and Requests and Responses are immutable values. That makes http4k apps very easy to test.  We don&#8217;t need to spin up a server and use an HTTP client library to send requests to it.  We don&#8217;t need to configure a special "mock" environment for testing with subtle differences to the real thing.  Our tests can just call the function. This makes them fast and reliable.</p>
 </div>
 <div class="paragraph">
-<p>As an application grows, it becomes convenient to write higher-level abstractions that abstract over the HTTP client. http4k models HTTP clients, like servers, as functions of type HttpHandler. To implement a server-side app you write an HttpHandler that receives a Request parameter and returns a Response. To use a client, you call the HttpHandler, passing a Request parameter and receive a Response as a result. We can compose code that would use an HTTP client to talk to an app directly with the HttpHandler of the app to test the integration of the two, and still get very fast, reliable tests that run entirely in memory.  We will look at this in detail in <a href="http-clients.html">Chapter 12, <em>HTTP Clients</em></a>. Given how small our app is at the moment, it is not a problem to call our app directly in the test.</p>
+<p>As an application grows, it becomes convenient to write higher-level abstractions that abstract over the HTTP client. http4k models HTTP clients, like servers, as functions of type HttpHandler. To implement a server-side app you write an HttpHandler that receives a Request parameter and returns a Response. To use a client, you call the HttpHandler, passing a Request parameter and receive a Response as a result. We can compose code that would use an HTTP client to talk to an app directly with the HttpHandler of the app to test the integration of the two, and still get very fast, reliable tests that run entirely in memory.  We will look at this in detail in <a href="http-clients.html">Chapter 13, <em>HTTP Clients</em></a>. Given how small our app is at the moment, it is not a problem to call our app directly in the test.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s a test that verifies our app returns a body of "hello, http4k":</p>
@@ -723,7 +723,7 @@ From now on, we will write the tests first, check they fail for the reason we ex
 </div>
 </div>
 <div class="sect2">
-<h3 id="_immutability">3.4. Immutability</h3>
+<h3 id="_immutability">4.4. Immutability</h3>
 <div class="paragraph">
 <p>Requests and Responses are immutable values. The <code>body</code> operation called by our app does not <em>set</em> the body of the Response but returns a <em>new</em> Response value with the given body.</p>
 </div>
@@ -773,7 +773,7 @@ Actual   :[Bearer token-1, Bearer token-2]</pre>
 <p>In the Spring code, the object refered to by <em>commonProperties</em> is mutable. The lines that calculate <em>r1</em> and <em>r2</em> mutate that object. State leaks between <em>r1</em> and <em>r2</em> without the data flow being is visible in the source code.</p>
 </div>
 <div class="paragraph">
-<p>Immutability makes data flow in http4k applications explicit and easy to follow with IntelliJ&#8217;s code navigation tools. There is no mutable state that allows the kind of "spooky action at a distance" possible with the Spring APIs. However, working with immutable data is a lot easier if we are familiar with another fundamental mechanism in http4k, lenses, so we will look at them next, in <a href="lenses.html">Chapter 4, <em>Headers and Lenses</em></a>.</p>
+<p>Immutability makes data flow in http4k applications explicit and easy to follow with IntelliJ&#8217;s code navigation tools. There is no mutable state that allows the kind of "spooky action at a distance" possible with the Spring APIs. However, working with immutable data is a lot easier if we are familiar with another fundamental mechanism in http4k, lenses, so we will look at them next, in <a href="lenses.html">Chapter 5, <em>Headers and Lenses</em></a>.</p>
 </div>
 </div>
 </div>
@@ -784,7 +784,7 @@ Actual   :[Bearer token-1, Bearer token-2]</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-05 13:47:08 +0100
+Last updated 2025-09-08 19:01:08 +0100
 </div>
 </div>
 </body>

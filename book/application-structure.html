@@ -434,6 +434,124 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<style>
+pre.rouge table td { padding: 5px; }
+pre.rouge table pre { margin: 0; }
+pre.rouge, pre.rouge .w {
+  color: #24292f;
+  background-color: #f6f8fa;
+}
+pre.rouge .k, pre.rouge .kd, pre.rouge .kn, pre.rouge .kp, pre.rouge .kr, pre.rouge .kt, pre.rouge .kv {
+  color: #cf222e;
+}
+pre.rouge .gr {
+  color: #f6f8fa;
+}
+pre.rouge .gd {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+pre.rouge .nb {
+  color: #953800;
+}
+pre.rouge .nc {
+  color: #953800;
+}
+pre.rouge .no {
+  color: #953800;
+}
+pre.rouge .nn {
+  color: #953800;
+}
+pre.rouge .sr {
+  color: #116329;
+}
+pre.rouge .na {
+  color: #116329;
+}
+pre.rouge .nt {
+  color: #116329;
+}
+pre.rouge .gi {
+  color: #116329;
+  background-color: #dafbe1;
+}
+pre.rouge .ges {
+  font-weight: bold;
+  font-style: italic;
+}
+pre.rouge .kc {
+  color: #0550ae;
+}
+pre.rouge .l, pre.rouge .ld, pre.rouge .m, pre.rouge .mb, pre.rouge .mf, pre.rouge .mh, pre.rouge .mi, pre.rouge .il, pre.rouge .mo, pre.rouge .mx {
+  color: #0550ae;
+}
+pre.rouge .sb {
+  color: #0550ae;
+}
+pre.rouge .bp {
+  color: #0550ae;
+}
+pre.rouge .ne {
+  color: #0550ae;
+}
+pre.rouge .nl {
+  color: #0550ae;
+}
+pre.rouge .py {
+  color: #0550ae;
+}
+pre.rouge .nv, pre.rouge .vc, pre.rouge .vg, pre.rouge .vi, pre.rouge .vm {
+  color: #0550ae;
+}
+pre.rouge .o, pre.rouge .ow {
+  color: #0550ae;
+}
+pre.rouge .gh {
+  color: #0550ae;
+  font-weight: bold;
+}
+pre.rouge .gu {
+  color: #0550ae;
+  font-weight: bold;
+}
+pre.rouge .s, pre.rouge .sa, pre.rouge .sc, pre.rouge .dl, pre.rouge .sd, pre.rouge .s2, pre.rouge .se, pre.rouge .sh, pre.rouge .sx, pre.rouge .s1, pre.rouge .ss {
+  color: #0a3069;
+}
+pre.rouge .nd {
+  color: #8250df;
+}
+pre.rouge .nf, pre.rouge .fm {
+  color: #8250df;
+}
+pre.rouge .err {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cm, pre.rouge .cp, pre.rouge .cpf, pre.rouge .c1, pre.rouge .cs {
+  color: #6e7781;
+}
+pre.rouge .gl {
+  color: #6e7781;
+}
+pre.rouge .gt {
+  color: #6e7781;
+}
+pre.rouge .ni {
+  color: #24292f;
+}
+pre.rouge .si {
+  color: #24292f;
+}
+pre.rouge .ge {
+  color: #24292f;
+  font-style: italic;
+}
+pre.rouge .gs {
+  color: #24292f;
+  font-weight: bold;
+}
+</style>
 <style>.toc-current{font-weight: bold;} .toc-root{font-family: "Open Sans","DejaVu Sans",sans-serif;
                        font-size: 0.9em;} #content{display: flex; flex-direction: column; flex: 1 1 auto;}
              .nav-footer{text-align: center; margin-top: auto;}
@@ -452,19 +570,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="fundamentals].html">I: The Fundamentals of Http4k</a>
 <ul class="sectlevel1">
-<li><a href="server-as-a-function.html">3. Server as a Function</a>
+<li><a href="server-as-a-function.html">4. Server as a Function</a>
 </li>
-<li><a href="lenses.html">4. Headers and Lenses</a>
+<li><a href="lenses.html">5. Headers and Lenses</a>
 </li>
-<li><a href="routing.html">5. Routing</a>
+<li><a href="routing.html">6. Routing</a>
 </li>
-<li><a href="filters-and-stacks.html">6. Filters and stacks</a>
+<li><a href="filters-and-stacks.html">7. Filters and stacks</a>
 </li>
-<li><a href="application-structure.html"><span class="toc-current">7. Http4k Application Structure</span></a>
-<ul class="sectlevel2">
-<li><a href="application-structure.html#_what_next">7.1. What next?</a>
-</li>
-</ul>
+<li><a href="application-structure.html"><span class="toc-current">8. Http4k Application Structure</span></a>
 </li>
 </ul>
 </li>
@@ -475,7 +589,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="application-structure">7. Http4k Application Structure</h2>
+<h2 id="application-structure">8. Http4k Application Structure</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Our trivial Hello World application has grown to have the typical top-level structure of an http4k application.</p>
@@ -484,68 +598,84 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>The <code>app</code> factory function creates the HttpHandlers of the application and defines the routing of requests to those handlers.  The factory function is parameterised by the resources that the application requires: the mutable map of greetings. Operational aspects are composed into the app by a filter stack. The main function initialises the resources, passes them to the factory function to creates the HttpHandler, composes operation aspects into the app via Filters, and starts a Server to run the app.</p>
 </div>
 <div class="paragraph">
-<p>However, as we&#8217;ve been building the app, we added each handler to the app function, inline in the routes definition. By now, the app function has become rather large and unwieldy.  If we were working in a team, we would get frequent merge conflicts as team members all try to apply their individual changes to the handlers in the app function.</p>
+<p>However, as we&#8217;ve been building the app, we&#8217;ve written everything in one source file, and all the app&#8217;s handlers in a single function.  That source file is now quite large, and the routes function likewise is too long.  It&#8217;s hard to read: the routing rules do not fit on the screen of my laptop.  If we were working in a team, we would get frequent merge conflicts as team members all make changes to the same function.</p>
 </div>
 <div class="paragraph">
-<p>We can make the app function easier to work with by factoring each handler out into its own top-level function.  Because HttpHandlers are just functions, this is quick to do with IntelliJ&#8217;s <em>Extract Function to Scope</em> refactoring, and easy to reverse with IntelliJ&#8217;s <em>Inline</em> refactoring if we don&#8217;t like the result. And our fast tests will let us quickly confirm that our refactoring has not changed our application&#8217;s behaviour.</p>
+<p>We can split the source into separate files: <code>routes.kt</code> for the app routing and handlers, <code>stack.kt</code> for the filter stack, and <code>main.kt</code> for the app and main function that compose it all together.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="chapters/separate-source-files.png" alt="Organising the app into separate files">
+</div>
+</div>
+<div class="paragraph">
+<p>We can also extract each handler into its own top-level function.  HttpHandlers are just functions, so this is quick to do with IntelliJ&#8217;s <em>Extract Function to Scope</em> refactoring, and easy to reverse with IntelliJ&#8217;s <em>Inline</em> refactoring if we don&#8217;t like the result. The fast tests will let us quickly confirm that our refactoring has not changed our application&#8217;s behaviour.</p>
 </div>
 <div class="paragraph">
 <p>There are a couple of structures we can refactor to.  Let&#8217;s try them both.</p>
 </div>
 <div class="paragraph">
-<p>We can factor out each <em>route</em> as a top-level function.</p>
+<p>We could factor out each <em>route</em> as a top-level function, composed together in the app-level <code>greetingRoutes</code> function.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="k">fun</span> <span class="nf">greetingRoutes</span><span class="p">(</span><span class="n">greetings</span><span class="p">:</span> <span class="nc">MutableMap</span><span class="p">&lt;</span><span class="nc">Locale</span><span class="p">,</span> <span class="nc">String</span><span class="p">&gt;)</span> <span class="p">=</span> <span class="nf">routes</span><span class="p">(</span>
+    <span class="nf">getPreferredGreetingRoute</span><span class="p">(</span><span class="n">greetings</span><span class="p">),</span>
+    <span class="nf">getGreetingRoute</span><span class="p">(</span><span class="n">greetings</span><span class="p">),</span>
+    <span class="nf">putGreetingRoute</span><span class="p">(</span><span class="n">greetings</span><span class="p">),</span>
+    <span class="nf">deleteGreetingRoute</span><span class="p">(</span><span class="n">greetings</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="o">..</span><span class="p">.</span>
+<span class="k">private</span> <span class="k">fun</span> <span class="nf">getGreetingRoute</span><span class="p">(</span><span class="n">greetings</span><span class="p">:</span> <span class="nc">MutableMap</span><span class="p">&lt;</span><span class="nc">Locale</span><span class="p">,</span> <span class="nc">String</span><span class="p">&gt;):</span> <span class="nc">RoutingHttpHandler</span> <span class="p">=</span>
+    <span class="s">"/hello/${language}"</span> <span class="n">bind</span> <span class="nc">GET</span> <span class="nf">to</span> <span class="p">{</span> <span class="n">request</span> <span class="p">-&gt;</span>
+        <span class="kd">val</span> <span class="py">lang</span> <span class="p">=</span> <span class="nf">language</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+        <span class="kd">val</span> <span class="py">text</span> <span class="p">=</span> <span class="n">greetings</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span>
+
+        <span class="k">when</span> <span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">null</span> <span class="p">-&gt;</span> <span class="nc">Response</span><span class="p">(</span><span class="nc">NOT_FOUND</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">-&gt;</span> <span class="nf">greetingResponse</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+<span class="o">..</span><span class="p">.</span></code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>TODO code here &#8230;&#8203;</p>
+<p>This has the benefit that the path and the lenses used to extract parameters from the path are in the same scope. However, the path ends up duplicated in the functions <code>getGreetingRoute</code>, <code>putGreetingRoute</code> and <code>deleteGreetingRoute</code>.</p>
 </div>
 <div class="paragraph">
-<p>Alternatively, we can factor out each <em>handler</em> as a top-level function, leaving the app responsible for the routing.</p>
+<p>Alternatively, we could factor out each <em>handler</em> as a top-level function, leaving the routes defined together in the <code>greetingRoutes</code> function.  Now we have to pass the lens used extract the language tag from the path into the handler to avoid too much connascence between the <code>greetingRoutes</code> function and each handler.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="k">fun</span> <span class="nf">greetingRoutes</span><span class="p">(</span><span class="n">greetings</span><span class="p">:</span> <span class="nc">MutableMap</span><span class="p">&lt;</span><span class="nc">Locale</span><span class="p">,</span> <span class="nc">String</span><span class="p">&gt;):</span> <span class="nc">RoutingHttpHandler</span> <span class="p">=</span>
+    <span class="nf">routes</span><span class="p">(</span>
+        <span class="s">"/hello"</span> <span class="n">bind</span> <span class="nc">GET</span> <span class="n">to</span> <span class="nf">getPreferredGreetingHandler</span><span class="p">(</span><span class="n">greetings</span><span class="p">),</span>
+        <span class="s">"/hello/${language}"</span> <span class="n">bind</span> <span class="nf">routes</span><span class="p">(</span>
+            <span class="nc">GET</span> <span class="n">to</span> <span class="nf">getGreetingHandler</span><span class="p">(</span><span class="n">language</span><span class="p">,</span> <span class="n">greetings</span><span class="p">),</span>
+            <span class="nc">PUT</span> <span class="n">to</span> <span class="nf">putGreetingHandler</span><span class="p">(</span><span class="n">language</span><span class="p">,</span> <span class="n">greetings</span><span class="p">),</span>
+            <span class="nc">DELETE</span> <span class="n">to</span> <span class="nf">deleteGreetingHandler</span><span class="p">(</span><span class="n">language</span><span class="p">,</span> <span class="n">greetings</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+<span class="o">..</span><span class="p">.</span>
+<span class="k">private</span> <span class="k">fun</span> <span class="nf">getGreetingHandler</span><span class="p">(</span>
+    <span class="n">language</span><span class="p">:</span> <span class="nc">PathLens</span><span class="p">&lt;</span><span class="nc">Locale</span><span class="p">&gt;,</span>
+    <span class="n">greetings</span><span class="p">:</span> <span class="nc">MutableMap</span><span class="p">&lt;</span><span class="nc">Locale</span><span class="p">,</span> <span class="nc">String</span><span class="p">&gt;</span>
+<span class="p">):</span> <span class="nc">HttpHandler</span> <span class="p">=</span> <span class="p">{</span> <span class="n">request</span> <span class="p">-&gt;</span>
+    <span class="kd">val</span> <span class="py">lang</span> <span class="p">=</span> <span class="nf">language</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+    <span class="kd">val</span> <span class="py">text</span> <span class="p">=</span> <span class="n">greetings</span><span class="p">[</span><span class="n">lang</span><span class="p">]</span>
+
+    <span class="k">when</span> <span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">null</span> <span class="p">-&gt;</span> <span class="nc">Response</span><span class="p">(</span><span class="nc">NOT_FOUND</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">-&gt;</span> <span class="nf">greetingResponse</span><span class="p">(</span><span class="n">lang</span><span class="p">,</span> <span class="n">text</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="o">..</span><span class="p">.</span></code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>TODO code here &#8230;&#8203;</p>
-</div>
-<div class="paragraph">
-<p>Personally, I prefer the second approach. It lets me see all the app&#8217;s routes in one place, and I can write exhaustive unit tests for the behaviour of each handler independently of the routing, where that makes sense.  If the application gets so large that a single routes function becomes impractical, you can organise the routes into separate functions that each create the routes for one type of resource.</p>
-</div>
-<div class="sect2">
-<h3 id="_what_next">7.1. What next?</h3>
-<div class="paragraph">
-<p>We&#8217;ve now seen all the fundamental mechanisms of http4k, and how to compose them to build an application.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>An http4k application is an HttpHandler, a function from Request to Response</p>
-</li>
-<li>
-<p>Requests and Responses are immutable values</p>
-</li>
-<li>
-<p>A Server or serverless runtime makes an HttpHandler available on the network.</p>
-</li>
-<li>
-<p>A Lens represents a property in an immutable structure, such as a Request or Response. The lens can extract the value of the property and "set" the value of the property, returning a copy of the structure with a different value for the property.</p>
-</li>
-<li>
-<p>Routing selects an HttpHandler from a collection to handle an incoming Request.</p>
-</li>
-<li>
-<p>A Filter is a function from HttpHandler to HttpHandler that composes additional behaviour into an http4k application.</p>
-</li>
-<li>
-<p>Filters are composed into "stacks" that implement the common operational aspects of the application.</p>
-</li>
-<li>
-<p>A client is also an HttpHandler that your code calls to make outgoing HTTP requests.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Everything else builds upon these principles.</p>
-</div>
-<div class="paragraph">
-<p>I&#8217;m surprised that "Hello World" let us explore that much of http4k! However, to explore more features, we need to build a more realistic application. Go get a cup of tea, and join us again in <a href="realistic.html">Part II, &#8220;Production Applications&#8221;</a>.</p>
-</div>
+<p>Personally, I prefer the second approach. It lets me see all the app&#8217;s routes in one place, and I can write exhaustive unit tests for the behaviour of each handler independently of the routing, if I need to.  If the application gets so large that a single routes function becomes impractical, I organise the routes into separate functions that each create the routes for one type of resource.</p>
 </div>
 </div>
 </div>
@@ -555,7 +685,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-05 13:47:08 +0100
+Last updated 2025-09-08 19:01:08 +0100
 </div>
 </div>
 </body>

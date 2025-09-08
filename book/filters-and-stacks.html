@@ -570,21 +570,21 @@ pre.rouge .gs {
 </li>
 <li><a href="fundamentals].html">I: The Fundamentals of Http4k</a>
 <ul class="sectlevel1">
-<li><a href="server-as-a-function.html">3. Server as a Function</a>
+<li><a href="server-as-a-function.html">4. Server as a Function</a>
 </li>
-<li><a href="lenses.html">4. Headers and Lenses</a>
+<li><a href="lenses.html">5. Headers and Lenses</a>
 </li>
-<li><a href="routing.html">5. Routing</a>
+<li><a href="routing.html">6. Routing</a>
 </li>
-<li><a href="filters-and-stacks.html"><span class="toc-current">6. Filters and stacks</span></a>
+<li><a href="filters-and-stacks.html"><span class="toc-current">7. Filters and stacks</span></a>
 <ul class="sectlevel2">
-<li><a href="filters-and-stacks.html#_other_useful_filters">6.1. Other Useful Filters</a>
+<li><a href="filters-and-stacks.html#_other_useful_filters">7.1. Other Useful Filters</a>
 </li>
-<li><a href="filters-and-stacks.html#_writing_a_filter">6.2. Writing a filter</a>
+<li><a href="filters-and-stacks.html#_writing_a_filter">7.2. Writing a filter</a>
 </li>
 </ul>
 </li>
-<li><a href="application-structure.html">7. Http4k Application Structure</a>
+<li><a href="application-structure.html">8. Http4k Application Structure</a>
 </li>
 </ul>
 </li>
@@ -595,7 +595,7 @@ pre.rouge .gs {
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="filters-and-stacks">6. Filters and stacks</h2>
+<h2 id="filters-and-stacks">7. Filters and stacks</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Implement "proactive content negotiation" via the Accept-Language header. The "/hello" path will select text based on client preferences.  For example:</p>
@@ -731,7 +731,7 @@ Caused by: java.lang.NumberFormatException: For input string: "xxx"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The test creates an HTTP server and client. This is the first time we&#8217;ve created an HTTP client. In http4k}, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="http-clients.html">Chapter 12, <em>HTTP Clients</em></a>.</p>
+<p>The test creates an HTTP server and client. This is the first time we&#8217;ve created an HTTP client. In http4k}, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="http-clients.html">Chapter 13, <em>HTTP Clients</em></a>.</p>
 </div>
 <div class="paragraph">
 <p>The integration test fails with:</p>
@@ -790,7 +790,7 @@ The LensFailure exception is a design compromise. The type declarations for lens
 </table>
 </div>
 <div class="sect2">
-<h3 id="_other_useful_filters">6.1. Other Useful Filters</h3>
+<h3 id="_other_useful_filters">7.1. Other Useful Filters</h3>
 <div class="paragraph">
 <p>The handler created by a Filter can modify the request before passing it to the next handler or modify the response from the next handler before returning the response to its caller. It can shortcut request handling by returning a response without ever passing the request to the next handler. It can catch exceptions thrown by the next handler and translate them into responses. Anything a higher-order function can do, a filter can do, because a filter is just a higher-order function.</p>
 </div>
@@ -847,6 +847,9 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 <div class="ulist">
 <ul>
 <li>
+<p>Server runtime, to receive requests and send responses</p>
+</li>
+<li>
 <p>Debugging, to ensure that we see all traffic during development</p>
 </li>
 <li>
@@ -881,7 +884,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </div>
 </div>
 <div class="sect2">
-<h3 id="_writing_a_filter">6.2. Writing a filter</h3>
+<h3 id="_writing_a_filter">7.2. Writing a filter</h3>
 <div class="paragraph">
 <p>TBD</p>
 </div>
@@ -894,7 +897,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-05 13:47:08 +0100
+Last updated 2025-09-08 19:01:08 +0100
 </div>
 </div>
 </body>

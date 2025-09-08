@@ -570,23 +570,23 @@ pre.rouge .gs {
 </li>
 <li><a href="fundamentals].html">I: The Fundamentals of Http4k</a>
 <ul class="sectlevel1">
-<li><a href="server-as-a-function.html">3. Server as a Function</a>
+<li><a href="server-as-a-function.html">4. Server as a Function</a>
 </li>
-<li><a href="lenses.html">4. Headers and Lenses</a>
+<li><a href="lenses.html">5. Headers and Lenses</a>
 </li>
-<li><a href="routing.html"><span class="toc-current">5. Routing</span></a>
+<li><a href="routing.html"><span class="toc-current">6. Routing</span></a>
 <ul class="sectlevel2">
-<li><a href="routing.html#_routing_requests_to_handlers">5.1. Routing Requests to Handlers</a>
+<li><a href="routing.html#_routing_requests_to_handlers">6.1. Routing Requests to Handlers</a>
 </li>
-<li><a href="routing.html#_extracting_values_from_a_request">5.2. Extracting Values from a Request</a>
+<li><a href="routing.html#_extracting_values_from_a_request">6.2. Extracting Values from a Request</a>
 </li>
-<li><a href="routing.html#_routing_different_methods_to_a_resource">5.3. Routing different methods to a resource</a>
+<li><a href="routing.html#_routing_different_methods_to_a_resource">6.3. Routing different methods to a resource</a>
 </li>
 </ul>
 </li>
-<li><a href="filters-and-stacks.html">6. Filters and stacks</a>
+<li><a href="filters-and-stacks.html">7. Filters and stacks</a>
 </li>
-<li><a href="application-structure.html">7. Http4k Application Structure</a>
+<li><a href="application-structure.html">8. Http4k Application Structure</a>
 </li>
 </ul>
 </li>
@@ -597,7 +597,7 @@ pre.rouge .gs {
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="routing">5. Routing</h2>
+<h2 id="routing">6. Routing</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>So far our application ignores the request.  This means that a client can get any URL and get the same text.  In real apps, we need to serve different resources on different URLs and perform different actions depending on the HTTP method and other properties of the request. In http4k, this is done by <em>routing</em> each request to a handler that can serve it.</p>
@@ -654,7 +654,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 <p>Now we need to make our app route requests to different handler behaviour based on the value of the path.</p>
 </div>
 <div class="sect2">
-<h3 id="_routing_requests_to_handlers">5.1. Routing Requests to Handlers</h3>
+<h3 id="_routing_requests_to_handlers">6.1. Routing Requests to Handlers</h3>
 <div class="paragraph">
 <p>http4k builds routing rules with the routes function that returns an HttpHandler that chooses which of a collection of handlers should receive each request. The most common routing criteria is by path and method, but http4k can route by path, query parameters, method, header values, and body content.  The routing criteria is defined by — you guessed it — functions, so you can write your own criteria if your application needs more sophisticated routing.</p>
 </div>
@@ -704,7 +704,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 </div>
 </div>
 <div class="sect2">
-<h3 id="_extracting_values_from_a_request">5.2. Extracting Values from a Request</h3>
+<h3 id="_extracting_values_from_a_request">6.2. Extracting Values from a Request</h3>
 <div class="paragraph">
 <p>There&#8217;s still some duplication between the language identifier in the path and the language identifier returned in the response.  There&#8217;s a risk we could introduce bugs by getting them out of sync, and that means more testing effort to ensure we don&#8217;t.  We can address that by making the app more data-driven and having it work from a mapping of language to greeting, like:</p>
 </div>
@@ -799,10 +799,10 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 </div>
 </div>
 <div class="sect2">
-<h3 id="_routing_different_methods_to_a_resource">5.3. Routing different methods to a resource</h3>
+<h3 id="_routing_different_methods_to_a_resource">6.3. Routing different methods to a resource</h3>
 <div class="paragraph">
 <p>So far our app only routes by path. Web applications also have to support other HTTP methods.
-To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in http4k in <a href="authentication.html">Chapter 15, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="persistence.html">Chapter 11, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
+To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in http4k in <a href="authentication.html">Chapter 16, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="persistence.html">Chapter 12, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s start by writing a test.  If the app can change the state of the map, we now need to make sure that tests are isolated from one another. Each test needs to start the application with its own map instance, initialised to a known state.  That means the app cannot be a global <em>value</em> that depends on the map as a global variable. It must be created by, you guessed it, a function, that takes the map of greetings as a parameter.</p>
@@ -942,7 +942,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;200 OK&gt; but was: &lt;405 M
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-05 13:47:08 +0100
+Last updated 2025-09-08 19:01:08 +0100
 </div>
 </div>
 </body>
