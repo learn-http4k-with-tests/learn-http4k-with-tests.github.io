@@ -1657,7 +1657,7 @@ Let&#8217;s write a test and see&#8230;&#8203;</p>
 </div>
 </div>
 <div class="paragraph">
-<p>The test fails with:</p>
+<p>The test fails with an unexpected exception:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1667,7 +1667,7 @@ Caused by: java.lang.NumberFormatException: For input string: "xxx"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If any of the functions that define a lens throws an exception, http4k wraps that exception in a LensFailure and rethrows it. In the test, the exception propagates up to JUnit, which reports it as a test failure.</p>
+<p>The value of the "q" parameter must be a number. The Header.ACCEPT_LANGUAGE lens threw a NumberFormatException when trying to parse "xxx" as a number. Http4k&#8217;s lens helpers caught the NumberFormatException, wrapped it in a LensFailure exception and rethrew it. The LensFailure exception propagated up to JUnit, which caught it and reported it as a test failure.</p>
 </div>
 <div class="paragraph">
 <p>What happens in a running application?  Let&#8217;s write a test and see&#8230;&#8203;</p>
@@ -1715,17 +1715,19 @@ org.opentest4j.AssertionFailedError: expected: &lt;400 Bad Request&gt; but was: 
 </div>
 </div>
 <div class="paragraph">
-<p>The last-ditch exception handler in the server runtime has caught the LensFailure thrown from our app and returned a 500 Internal Server Error response to the client. This is not the right behaviour: the malformed request is the fault of the client, not the server, so the response should be 400 Bad Request. If our app reports an internal server error when a client sends a bad request, a faulty client will keep retrying the request. Whoever is on support duty will not be happy! Our application must catch LensFailure exceptions and translate them to the correct response status code.</p>
+<p>The last-ditch exception handler in the server runtime caught the LensFailure thrown from our app and returned a 500 Internal Server Error response to the client. This is not the right behaviour: the malformed request is the fault of the client, not the server, so the response should be 400 Bad Request. If our app reports an internal server error when a client sends a bad request, a faulty client will keep retrying the request. Whoever is on support duty will not be happy!</p>
 </div>
 <div class="paragraph">
-<p>We don&#8217;t want to duplicate that try/catch code in every handler in our application. The solution in http4k is <em>filters</em>, and specifically the CatchLensFailure filter.</p>
+<p>Our application must catch LensFailure exceptions and translate them to the correct response status code.
+However, duplicating that try/catch code in every handler in our application would not be ideal.
+The solution in http4k is <em>filters</em>, and specifically the CatchLensFailure filter.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_catching_lens_failures">7.2. Catching lens failures</h3>
 <div class="paragraph">
-<p>Let&#8217;s look at the filter in use, and then examine what the code is doing.
-I&#8217;ve refactored the routes into its own function, so that it&#8217;s easier to see how the filter is applied.</p>
+<p>Let&#8217;s look at the CatchLensFailure filter in use, and then examine what the code is doing.
+I&#8217;ve refactored the routes into their own function, so that it&#8217;s easier to see how the filter is applied.</p>
 </div>
 <div class="listingblock">
 <div class="content">
