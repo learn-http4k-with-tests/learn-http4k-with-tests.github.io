@@ -607,7 +607,7 @@ pre.rouge .gs {
 <p>Our Hello World app doesn&#8217;t report the content type of the greeting it sends.  It should send a Content-Type header in the response to tell the client that the content is plain text.</p>
 </div>
 <div class="paragraph">
-<p>http4k defines many convenient extension functions on Response, including extensions to get and set the Content-Type header.</p>
+<p>Http4k defines many convenient extension functions on Response, including extensions to get and set the Content-Type header.</p>
 </div>
 <div class="paragraph">
 <p>Well &#8230;&#8203; not "set" but "return a new Response value that is a copy of the original Response value but with a Content-Type header with the given value". That&#8217;s quite a mouthful, so I&#8217;ll use keep using the word "set" as a shorthand, with the understanding that the operation transforms an immutable value rather than mutates state of a mutable object.</p>
@@ -637,7 +637,7 @@ Actual   :null</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>We can make the test pass by using the extension that sets the Content-Type header.  http4k defines constants for many common content types as members of the companion object of the ContentType class, including the one we want: TEXT_PLAIN.</p>
+<p>We can make the test pass by using the extension that sets the Content-Type header.  Http4k defines constants for many common content types as members of the companion object of the ContentType class, including the one we want: TEXT_PLAIN.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -652,7 +652,7 @@ Actual   :null</pre>
 <div class="sect2">
 <h3 id="_lenses">5.2. Lenses</h3>
 <div class="paragraph">
-<p>The contentType helper functions are actually implemented using another fundamental concept of http4k: <em>lenses</em>. Lenses are often considered an advanced functional programming topic, but so much of http4k depends on them that we need to bite the bullet and understand how they work now. Don&#8217;t worry: the essential concept is pretty simple.</p>
+<p>The contentType helper functions are actually implemented using another fundamental concept of Http4k: <em>lenses</em>. Lenses are often considered an advanced functional programming topic, but so much of Http4k depends on them that we need to bite the bullet and understand how they work now. Don&#8217;t worry: the essential concept is pretty simple.</p>
 </div>
 <div class="paragraph">
 <p>If we inline calls to the contentType extensions, we can see the lenses at work:</p>
@@ -690,7 +690,7 @@ Actual   :null</pre>
 <p>You can also use a lens as a two-argument function, taking a part and a structure, that returns a new structure containing the part. Our app uses the Header.CONTENT_TYPE lens to combine a value for the Content-Type header and a Response without a Content-Type header to get a Response with a Content-Type header of the given value.</p>
 </div>
 <div class="paragraph">
-<p>If that&#8217;s confusing, I would normally suggest taking a look at the type declarations, but http4k&#8217;s type declarations for lenses are quite complex, with a rich type hierarchy that is of help when you need to create new types of lens, but does get in the way of understanding the simple essence of lenses. Let&#8217;s instead use tests to build an intuition of how lenses behave.</p>
+<p>If that&#8217;s confusing, I would normally suggest taking a look at the type declarations, but Http4k&#8217;s type declarations for lenses are quite complex, with a rich type hierarchy that is of help when you need to create new types of lens, but does get in the way of understanding the simple essence of lenses. Let&#8217;s instead use tests to build an intuition of how lenses behave.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -803,10 +803,10 @@ Here&#8217;s our test extended to include the behaviour we want:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>That test doesn&#8217;t even compile.  http4k doesn&#8217;t have a lens for the Content-Language header. We will need to write it ourselves.</p>
+<p>That test doesn&#8217;t even compile.  Http4k doesn&#8217;t have a lens for the Content-Language header. We will need to write it ourselves.</p>
 </div>
 <div class="paragraph">
-<p>We could define it as a top-level constant in our app, but http4k&#8217;s naming convention is to group lenses by the part of the HttpMessage that they refer to: Body, Header, Path, Query, etc.
+<p>We could define it as a top-level constant in our app, but Http4k&#8217;s naming convention is to group lenses by the part of the HttpMessage that they refer to: Body, Header, Path, Query, etc.
 If we are working in a team, or publishing a library, following this convention will help other developers find our new lens with autocomplete in the IDE.</p>
 </div>
 <div class="imageblock">
@@ -815,7 +815,7 @@ If we are working in a team, or publishing a library, following this convention 
 </div>
 </div>
 <div class="paragraph">
-<p>We can follow http4k&#8217;s naming convention by writing our lens as extension of the Header object.</p>
+<p>We can follow Http4k&#8217;s naming convention by writing our lens as extension of the Header object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -828,7 +828,7 @@ If we are working in a team, or publishing a library, following this convention 
 <p>As well as being a scope for header lenses, the Header object is a partially defined lens that represents some value of type String within the headers of an HttpMessage.  Partially defined, because to be a fully defined lens that targets a specific header, it needs the name of the header. This is what the call to <code>optional</code> does.  The <code>map</code> method turns the (partially defined) lens for a String into a lens for a Locale by mapping in both directions between String and Locale. The mapping is defined by two functions.  The function of type <code>(String)&#8594;Locale</code> is used when getting the header value.  The function of <code>(Locale)&#8594;String</code> is used when setting the header value.</p>
 </div>
 <div class="paragraph">
-<p>My brain finds that http4k&#8217;s lens declarations read backwards. I would find an API like <code>Header.named("content-language").map(&#8230;&#8203;).optional()</code> easier to understand, but the API is what it is, and it works. As an author I struggle to explain it well (sorry about that!), but as a developer I can define new types of lens very easily and succinctly. And when you use http4k, you define new lenses a <em>lot</em>!</p>
+<p>My brain finds that Http4k&#8217;s lens declarations read backwards. I would find an API like <code>Header.named("content-language").map(&#8230;&#8203;).optional()</code> easier to understand, but the API is what it is, and it works. As an author I struggle to explain it well (sorry about that!), but as a developer I can define new types of lens very easily and succinctly. And when you use Http4k, you define new lenses a <em>lot</em>!</p>
 </div>
 <div class="paragraph">
 <p>With the definition of the CONTENT_LANGUAGE lens, our test compiles, and now fails as we expect:</p>
@@ -908,7 +908,7 @@ The <code>lazyOf</code> function in Kotlin&#8217;s standard library actually cre
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-09 19:10:25 +0100
+Last updated 2025-09-09 19:16:41 +0100
 </div>
 </div>
 </body>

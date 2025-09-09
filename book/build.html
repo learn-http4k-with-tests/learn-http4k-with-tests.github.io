@@ -594,13 +594,13 @@ pre.rouge .gs {
 <h2 id="build">3. Setting up the Build</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Before we can start writing http4k web apps, we need a Kotlin build that includes the http4k dependencies.</p>
+<p>Before we can start writing Http4k web apps, we need a Kotlin build that includes the Http4k dependencies.</p>
 </div>
 <div class="paragraph">
-<p>I&#8217;m assuming that you use Gradle: at the time of writing it&#8217;s the default build tool for Kotlin projects. I&#8217;m also assuming that you&#8217;re writing your Gradle build scripts in Kotlin, not Groovy: at the time of writing it&#8217;s the default syntax for Gradle builds. To get started quickly, you can get IntelliJ to create a new Kotlin JVM project and it will generate a working Gradle build script to which you can add the http4k dependencies.</p>
+<p>I&#8217;m assuming that you use Gradle: at the time of writing it&#8217;s the default build tool for Kotlin projects. I&#8217;m also assuming that you&#8217;re writing your Gradle build scripts in Kotlin, not Groovy: at the time of writing it&#8217;s the default syntax for Gradle builds. To get started quickly, you can get IntelliJ to create a new Kotlin JVM project and it will generate a working Gradle build script to which you can add the Http4k dependencies.</p>
 </div>
 <div class="paragraph">
-<p>Add the following dependencies to bring in the core http4k module:</p>
+<p>Add the following dependencies to bring in the core Http4k module:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -609,13 +609,13 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="paragraph">
-<p>If you&#8217;re used to Java frameworks like Spring Boot, you&#8217;ll find that http4k has a quite different philosophy. Spring Boot follows a "batteries included" approach. It includes a large number of dependencies by default. Its behaviour can depend on what it finds on the classpath at runtime, which makes getting started easy but can lead to surprises as a project grows.  http4k may be characterised as "batteries readily available".  It has a small core that has no dependencies beyond the Kotlin standard library and lots of optional modules, most of which bring in additional dependencies. Applications explicitly depend <em>only</em> on the modules they actually need. http4k will not activate features if a module happens to be on the classpath. Applications have to explicitly compose into their application the features they want to use from http4k&#8217;s modules.</p>
+<p>If you&#8217;re used to Java frameworks like Spring Boot, you&#8217;ll find that Http4k has a quite different philosophy. Spring Boot follows a "batteries included" approach. It includes a large number of dependencies by default. Its behaviour can depend on what it finds on the classpath at runtime, which makes getting started easy but can lead to surprises as a project grows.  Http4k may be characterised as "batteries readily available".  It has a small core that has no dependencies beyond the Kotlin standard library and lots of optional modules, most of which bring in additional dependencies. Applications explicitly depend <em>only</em> on the modules they actually need. Http4k will not activate features if a module happens to be on the classpath. Applications have to explicitly compose into their application the features they want to use from Http4k&#8217;s modules.</p>
 </div>
 <div class="paragraph">
-<p>The http4k project publishes versions of the toolkit as a "bill of materials" (BOM) that specifies consistent versions of all the http4k modules and their transitive dependencies. In your build script, you depend on a specific version of the BOM as a platform dependency, and then you don&#8217;t need to specif the versions of each http4k module your project uses.  When a new http4k version is released, you only need to change the version of the BOM to upgrade all the http4k modules in your project.  http4k releases quite frequently (sometimes multiple times a day!), but upgrades are easy to adopt and because the http4k API is very narrow, new versions seldom require source code changes.</p>
+<p>The Http4k project publishes versions of the toolkit as a "bill of materials" (BOM) that specifies consistent versions of all the Http4k modules and their transitive dependencies. In your build script, you depend on a specific version of the BOM as a platform dependency, and then you don&#8217;t need to specif the versions of each Http4k module your project uses.  When a new Http4k version is released, you only need to change the version of the BOM to upgrade all the Http4k modules in your project.  Http4k releases quite frequently (sometimes multiple times a day!), but upgrades are easy to adopt and because the Http4k API is very narrow, new versions seldom require source code changes.</p>
 </div>
 <div class="paragraph">
-<p>As we continue through the book, we will add dependencies on other http4k modules as needed, but this is enough to be able to write our first http4k application. However, it&#8217;s not enough for us to be able to <em>test</em> our first http4k application. For testing, we will add the <code>kotlin-test-junit5</code> module of the Kotlin standard library:</p>
+<p>As we continue through the book, we will add dependencies on other Http4k modules as needed, but this is enough to be able to write our first Http4k application. However, it&#8217;s not enough for us to be able to <em>test</em> our first Http4k application. For testing, we will add the <code>kotlin-test-junit5</code> module of the Kotlin standard library:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -652,7 +652,7 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="paragraph">
-<p>Now let’s write a Hello World app to check our build script works and start exploring the http4k API.</p>
+<p>Now let’s write a Hello World app to check our build script works and start exploring the Http4k API.</p>
 </div>
 </div>
 </div>
@@ -662,7 +662,7 @@ pre.rouge .gs {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-09 19:10:25 +0100
+Last updated 2025-09-09 19:16:41 +0100
 </div>
 </div>
 </body>

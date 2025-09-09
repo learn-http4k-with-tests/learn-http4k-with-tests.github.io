@@ -641,10 +641,10 @@ pre.rouge .gs {
 <h2 id="acknowledgements">2. Acknowlegements</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Thank you to  Chris James (AKA Quii), who came up with the catchy "Learn &lt;thing&gt; with tests" name and kindly allowed me to reuse it for http4k. Check out his book, <a href="https://quii.gitbook.io/learn-go-with-tests">Learn Go With Tests</a>, for an introduction to programming, and testing, in the Go language.</p>
+<p>Thank you to  Chris James (AKA Quii), who came up with the catchy "Learn &lt;thing&gt; with tests" name and kindly allowed me to reuse it for Http4k. Check out his book, <a href="https://quii.gitbook.io/learn-go-with-tests">Learn Go With Tests</a>, for an introduction to programming, and testing, in the Go language.</p>
 </div>
 <div class="paragraph">
-<p>Thanks to Dave Denton and Ivan Sanchez, authors of http4k, for answering my questions about how and why http4k works the way it does.</p>
+<p>Thanks to Dave Denton and Ivan Sanchez, authors of Http4k, for answering my questions about how and why Http4k works the way it does.</p>
 </div>
 <div class="paragraph">
 <p>Thanks to
@@ -658,7 +658,7 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 <div class="openblock partintro">
 <div class="content">
 <div class="paragraph">
-<p>In this part, we examine the fundamental concepts in http4k, by writing a tiny Hello World application. This will give us the foundations we need for <a href="#realistic">Part II</a>, which looks at how http4k meets the needs of production applications.</p>
+<p>In this part, we examine the fundamental concepts in Http4k, by writing a tiny Hello World application. This will give us the foundations we need for <a href="#realistic">Part II</a>, which looks at how Http4k meets the needs of production applications.</p>
 </div>
 </div>
 </div>
@@ -666,13 +666,13 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 <h2 id="build">3. Setting up the Build</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Before we can start writing http4k web apps, we need a Kotlin build that includes the http4k dependencies.</p>
+<p>Before we can start writing Http4k web apps, we need a Kotlin build that includes the Http4k dependencies.</p>
 </div>
 <div class="paragraph">
-<p>I&#8217;m assuming that you use Gradle: at the time of writing it&#8217;s the default build tool for Kotlin projects. I&#8217;m also assuming that you&#8217;re writing your Gradle build scripts in Kotlin, not Groovy: at the time of writing it&#8217;s the default syntax for Gradle builds. To get started quickly, you can get IntelliJ to create a new Kotlin JVM project and it will generate a working Gradle build script to which you can add the http4k dependencies.</p>
+<p>I&#8217;m assuming that you use Gradle: at the time of writing it&#8217;s the default build tool for Kotlin projects. I&#8217;m also assuming that you&#8217;re writing your Gradle build scripts in Kotlin, not Groovy: at the time of writing it&#8217;s the default syntax for Gradle builds. To get started quickly, you can get IntelliJ to create a new Kotlin JVM project and it will generate a working Gradle build script to which you can add the Http4k dependencies.</p>
 </div>
 <div class="paragraph">
-<p>Add the following dependencies to bring in the core http4k module:</p>
+<p>Add the following dependencies to bring in the core Http4k module:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -681,13 +681,13 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>If you&#8217;re used to Java frameworks like Spring Boot, you&#8217;ll find that http4k has a quite different philosophy. Spring Boot follows a "batteries included" approach. It includes a large number of dependencies by default. Its behaviour can depend on what it finds on the classpath at runtime, which makes getting started easy but can lead to surprises as a project grows.  http4k may be characterised as "batteries readily available".  It has a small core that has no dependencies beyond the Kotlin standard library and lots of optional modules, most of which bring in additional dependencies. Applications explicitly depend <em>only</em> on the modules they actually need. http4k will not activate features if a module happens to be on the classpath. Applications have to explicitly compose into their application the features they want to use from http4k&#8217;s modules.</p>
+<p>If you&#8217;re used to Java frameworks like Spring Boot, you&#8217;ll find that Http4k has a quite different philosophy. Spring Boot follows a "batteries included" approach. It includes a large number of dependencies by default. Its behaviour can depend on what it finds on the classpath at runtime, which makes getting started easy but can lead to surprises as a project grows.  Http4k may be characterised as "batteries readily available".  It has a small core that has no dependencies beyond the Kotlin standard library and lots of optional modules, most of which bring in additional dependencies. Applications explicitly depend <em>only</em> on the modules they actually need. Http4k will not activate features if a module happens to be on the classpath. Applications have to explicitly compose into their application the features they want to use from Http4k&#8217;s modules.</p>
 </div>
 <div class="paragraph">
-<p>The http4k project publishes versions of the toolkit as a "bill of materials" (BOM) that specifies consistent versions of all the http4k modules and their transitive dependencies. In your build script, you depend on a specific version of the BOM as a platform dependency, and then you don&#8217;t need to specif the versions of each http4k module your project uses.  When a new http4k version is released, you only need to change the version of the BOM to upgrade all the http4k modules in your project.  http4k releases quite frequently (sometimes multiple times a day!), but upgrades are easy to adopt and because the http4k API is very narrow, new versions seldom require source code changes.</p>
+<p>The Http4k project publishes versions of the toolkit as a "bill of materials" (BOM) that specifies consistent versions of all the Http4k modules and their transitive dependencies. In your build script, you depend on a specific version of the BOM as a platform dependency, and then you don&#8217;t need to specif the versions of each Http4k module your project uses.  When a new Http4k version is released, you only need to change the version of the BOM to upgrade all the Http4k modules in your project.  Http4k releases quite frequently (sometimes multiple times a day!), but upgrades are easy to adopt and because the Http4k API is very narrow, new versions seldom require source code changes.</p>
 </div>
 <div class="paragraph">
-<p>As we continue through the book, we will add dependencies on other http4k modules as needed, but this is enough to be able to write our first http4k application. However, it&#8217;s not enough for us to be able to <em>test</em> our first http4k application. For testing, we will add the <code>kotlin-test-junit5</code> module of the Kotlin standard library:</p>
+<p>As we continue through the book, we will add dependencies on other Http4k modules as needed, but this is enough to be able to write our first Http4k application. However, it&#8217;s not enough for us to be able to <em>test</em> our first Http4k application. For testing, we will add the <code>kotlin-test-junit5</code> module of the Kotlin standard library:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -724,7 +724,7 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Now let’s write a Hello World app to check our build script works and start exploring the http4k API.</p>
+<p>Now let’s write a Hello World app to check our build script works and start exploring the Http4k API.</p>
 </div>
 </div>
 </div>
@@ -734,7 +734,7 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 <div class="sect2">
 <h3 id="_request_response_and_httphandler">4.1. Request, Response and HttpHandler</h3>
 <div class="paragraph">
-<p>Let&#8217;s jump straight in. Here&#8217;s "Hello World" in http4k:</p>
+<p>Let&#8217;s jump straight in. Here&#8217;s "Hello World" in Http4k:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -744,7 +744,7 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>An http4k application is a value of type HttpHandler, which is a function from Request to Response.</p>
+<p>An Http4k application is a value of type HttpHandler, which is a function from Request to Response.</p>
 </div>
 <div class="paragraph">
 <p>You can navigate to the definition of HttpHandler in IntelliJ and see that it is nothing more than a function:</p>
@@ -755,19 +755,19 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Almost everything an http4k web app must do is implemented by functions of HttpHandler functions. Routing? Functions. Content negotiation? Functions. Views and templates? Functions. I could go on&#8230;&#8203; and I will! Authentication? Functions. Error handling? Functions. Observability? Functions. HTTP clients? Functions. Resilience? Functions. OK, I&#8217;ll stop now. If you have a question, the answer is usually "Functions!" and those functions usually take a Request and return a Response, or compose functions that take a Request and return a Response into a new function that takes a Request and returns a Response.</p>
+<p>Almost everything an Http4k web app must do is implemented by functions of HttpHandler functions. Routing? Functions. Content negotiation? Functions. Views and templates? Functions. I could go on&#8230;&#8203; and I will! Authentication? Functions. Error handling? Functions. Observability? Functions. HTTP clients? Functions. Resilience? Functions. OK, I&#8217;ll stop now. If you have a question, the answer is usually "Functions!" and those functions usually take a Request and return a Response, or compose functions that take a Request and return a Response into a new function that takes a Request and returns a Response.</p>
 </div>
 <div class="paragraph">
 <p>The HttpHandler for our Hello World app doesn&#8217;t do anything with the request (yet), and returns a Response with a status of 200 OK and a body of the text "hello, world".</p>
 </div>
 <div class="paragraph">
-<p>It&#8217;s conventional to define an HttpHandler as a lambda, not a named function to make it easier to pass it around as a value. If declared as a named function we would have to refer to the handler <em>value</em> as <code>::app</code> instead of <code>app</code>.  http4k apps use HttpHandlers as first-class values extensively. They store them in variables, pass them into functions as parameters, return them from functions as results, and compose them with other HttpHandler functions to form new HttpHandler functions.</p>
+<p>It&#8217;s conventional to define an HttpHandler as a lambda, not a named function to make it easier to pass it around as a value. If declared as a named function we would have to refer to the handler <em>value</em> as <code>::app</code> instead of <code>app</code>.  Http4k apps use HttpHandlers as first-class values extensively. They store them in variables, pass them into functions as parameters, return them from functions as results, and compose them with other HttpHandler functions to form new HttpHandler functions.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_running_our_app_in_a_server">4.2. Running our App in a Server</h3>
 <div class="paragraph">
-<p>To run our application, we need to launch it in a Server. A Server exposes the app on the network and translates between on-the-wire HTTP communication and http4k&#8217;s "server as a function" model. The http-core module contains a server implementation that uses the HttpServer class of the JDK, but that&#8217;s only suitable for local development and experiments. For production use, you can choose one of the server modules listed at <a href="https://www.http4k.org/ecosystem/http4k/reference/servers/" class="bare">https://www.http4k.org/ecosystem/http4k/reference/servers/</a> that is a good fit for your production environment.  In this book we will use Jetty with Java&#8217;s virtual threads.</p>
+<p>To run our application, we need to launch it in a Server. A Server exposes the app on the network and translates between on-the-wire HTTP communication and Http4k&#8217;s "server as a function" model. The http-core module contains a server implementation that uses the HttpServer class of the JDK, but that&#8217;s only suitable for local development and experiments. For production use, you can choose one of the server modules listed at <a href="https://www.http4k.org/ecosystem/http4k/reference/servers/" class="bare">https://www.http4k.org/ecosystem/http4k/reference/servers/</a> that is a good fit for your production environment.  In this book we will use Jetty with Java&#8217;s virtual threads.</p>
 </div>
 <div class="paragraph">
 <p>First, we must add a dependency on the http4k-server-jetty module to our build file:</p>
@@ -806,10 +806,10 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 <div class="sect2">
 <h3 id="_testing_our_app">4.3. Testing our App</h3>
 <div class="paragraph">
-<p>An http4k app is just a function, and Requests and Responses are immutable values. That makes http4k apps very easy to test.  We don&#8217;t need to spin up a server and use an HTTP client library to send requests to it.  We don&#8217;t need to configure a special "mock" environment for testing with subtle differences to the real thing.  Our tests can just call the function. This makes them fast and reliable.</p>
+<p>An Http4k app is just a function, and Requests and Responses are immutable values. That makes Http4k apps very easy to test.  We don&#8217;t need to spin up a server and use an HTTP client library to send requests to it.  We don&#8217;t need to configure a special "mock" environment for testing with subtle differences to the real thing.  Our tests can just call the function. This makes them fast and reliable.</p>
 </div>
 <div class="paragraph">
-<p>As an application grows, it becomes convenient to write higher-level abstractions that abstract over the HTTP client. http4k models HTTP clients, like servers, as functions of type HttpHandler. To implement a server-side app you write an HttpHandler that receives a Request parameter and returns a Response. To use a client, you call the HttpHandler, passing a Request parameter and receive a Response as a result. We can compose code that would use an HTTP client to talk to an app directly with the HttpHandler of the app to test the integration of the two, and still get very fast, reliable tests that run entirely in memory.  We will look at this in detail in <a href="#http-clients">Chapter 13, <em>HTTP Clients</em></a>. Given how small our app is at the moment, it is not a problem to call our app directly in the test.</p>
+<p>As an application grows, it becomes convenient to write higher-level abstractions that abstract over the HTTP client. Http4k models HTTP clients, like servers, as functions of type HttpHandler. To implement a server-side app you write an HttpHandler that receives a Request parameter and returns a Response. To use a client, you call the HttpHandler, passing a Request parameter and receive a Response as a result. We can compose code that would use an HTTP client to talk to an app directly with the HttpHandler of the app to test the integration of the two, and still get very fast, reliable tests that run entirely in memory.  We will look at this in detail in <a href="#http-clients">Chapter 13, <em>HTTP Clients</em></a>. Given how small our app is at the moment, it is not a problem to call our app directly in the test.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s a test that verifies our app returns a body of "hello, http4k":</p>
@@ -858,7 +858,7 @@ From now on, we will write the tests first, check they fail for the reason we ex
 <p>Requests and Responses are immutable values. The <code>body</code> operation called by our app does not <em>set</em> the body of the Response but returns a <em>new</em> Response value with the given body.</p>
 </div>
 <div class="paragraph">
-<p>Compare immutable and here&#8217;s a test of code using the http4k API to define common properties for Requests and then derive two actual Requests with those common properties.</p>
+<p>Compare immutable and here&#8217;s a test of code using the Http4k API to define common properties for Requests and then derive two actual Requests with those common properties.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -903,7 +903,7 @@ Actual   :[Bearer token-1, Bearer token-2]</pre>
 <p>In the Spring code, the object refered to by <em>commonProperties</em> is mutable. The lines that calculate <em>r1</em> and <em>r2</em> mutate that object. State leaks between <em>r1</em> and <em>r2</em> without the data flow being is visible in the source code.</p>
 </div>
 <div class="paragraph">
-<p>Immutability makes data flow in http4k applications explicit and easy to follow with IntelliJ&#8217;s code navigation tools. There is no mutable state that allows the kind of "spooky action at a distance" possible with the Spring APIs. However, working with immutable data is a lot easier if we are familiar with another fundamental mechanism in http4k, lenses, so we will look at them next, in <a href="#lenses">Chapter 5, <em>Headers and Lenses</em></a>.</p>
+<p>Immutability makes data flow in Http4k applications explicit and easy to follow with IntelliJ&#8217;s code navigation tools. There is no mutable state that allows the kind of "spooky action at a distance" possible with the Spring APIs. However, working with immutable data is a lot easier if we are familiar with another fundamental mechanism in Http4k, lenses, so we will look at them next, in <a href="#lenses">Chapter 5, <em>Headers and Lenses</em></a>.</p>
 </div>
 </div>
 </div>
@@ -917,7 +917,7 @@ Actual   :[Bearer token-1, Bearer token-2]</pre>
 <p>Our Hello World app doesn&#8217;t report the content type of the greeting it sends.  It should send a Content-Type header in the response to tell the client that the content is plain text.</p>
 </div>
 <div class="paragraph">
-<p>http4k defines many convenient extension functions on Response, including extensions to get and set the Content-Type header.</p>
+<p>Http4k defines many convenient extension functions on Response, including extensions to get and set the Content-Type header.</p>
 </div>
 <div class="paragraph">
 <p>Well &#8230;&#8203; not "set" but "return a new Response value that is a copy of the original Response value but with a Content-Type header with the given value". That&#8217;s quite a mouthful, so I&#8217;ll use keep using the word "set" as a shorthand, with the understanding that the operation transforms an immutable value rather than mutates state of a mutable object.</p>
@@ -947,7 +947,7 @@ Actual   :null</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>We can make the test pass by using the extension that sets the Content-Type header.  http4k defines constants for many common content types as members of the companion object of the ContentType class, including the one we want: TEXT_PLAIN.</p>
+<p>We can make the test pass by using the extension that sets the Content-Type header.  Http4k defines constants for many common content types as members of the companion object of the ContentType class, including the one we want: TEXT_PLAIN.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -962,7 +962,7 @@ Actual   :null</pre>
 <div class="sect2">
 <h3 id="_lenses">5.2. Lenses</h3>
 <div class="paragraph">
-<p>The contentType helper functions are actually implemented using another fundamental concept of http4k: <em>lenses</em>. Lenses are often considered an advanced functional programming topic, but so much of http4k depends on them that we need to bite the bullet and understand how they work now. Don&#8217;t worry: the essential concept is pretty simple.</p>
+<p>The contentType helper functions are actually implemented using another fundamental concept of Http4k: <em>lenses</em>. Lenses are often considered an advanced functional programming topic, but so much of Http4k depends on them that we need to bite the bullet and understand how they work now. Don&#8217;t worry: the essential concept is pretty simple.</p>
 </div>
 <div class="paragraph">
 <p>If we inline calls to the contentType extensions, we can see the lenses at work:</p>
@@ -1000,7 +1000,7 @@ Actual   :null</pre>
 <p>You can also use a lens as a two-argument function, taking a part and a structure, that returns a new structure containing the part. Our app uses the Header.CONTENT_TYPE lens to combine a value for the Content-Type header and a Response without a Content-Type header to get a Response with a Content-Type header of the given value.</p>
 </div>
 <div class="paragraph">
-<p>If that&#8217;s confusing, I would normally suggest taking a look at the type declarations, but http4k&#8217;s type declarations for lenses are quite complex, with a rich type hierarchy that is of help when you need to create new types of lens, but does get in the way of understanding the simple essence of lenses. Let&#8217;s instead use tests to build an intuition of how lenses behave.</p>
+<p>If that&#8217;s confusing, I would normally suggest taking a look at the type declarations, but Http4k&#8217;s type declarations for lenses are quite complex, with a rich type hierarchy that is of help when you need to create new types of lens, but does get in the way of understanding the simple essence of lenses. Let&#8217;s instead use tests to build an intuition of how lenses behave.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1113,10 +1113,10 @@ Here&#8217;s our test extended to include the behaviour we want:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>That test doesn&#8217;t even compile.  http4k doesn&#8217;t have a lens for the Content-Language header. We will need to write it ourselves.</p>
+<p>That test doesn&#8217;t even compile.  Http4k doesn&#8217;t have a lens for the Content-Language header. We will need to write it ourselves.</p>
 </div>
 <div class="paragraph">
-<p>We could define it as a top-level constant in our app, but http4k&#8217;s naming convention is to group lenses by the part of the HttpMessage that they refer to: Body, Header, Path, Query, etc.
+<p>We could define it as a top-level constant in our app, but Http4k&#8217;s naming convention is to group lenses by the part of the HttpMessage that they refer to: Body, Header, Path, Query, etc.
 If we are working in a team, or publishing a library, following this convention will help other developers find our new lens with autocomplete in the IDE.</p>
 </div>
 <div class="imageblock">
@@ -1125,7 +1125,7 @@ If we are working in a team, or publishing a library, following this convention 
 </div>
 </div>
 <div class="paragraph">
-<p>We can follow http4k&#8217;s naming convention by writing our lens as extension of the Header object.</p>
+<p>We can follow Http4k&#8217;s naming convention by writing our lens as extension of the Header object.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1138,7 +1138,7 @@ If we are working in a team, or publishing a library, following this convention 
 <p>As well as being a scope for header lenses, the Header object is a partially defined lens that represents some value of type String within the headers of an HttpMessage.  Partially defined, because to be a fully defined lens that targets a specific header, it needs the name of the header. This is what the call to <code>optional</code> does.  The <code>map</code> method turns the (partially defined) lens for a String into a lens for a Locale by mapping in both directions between String and Locale. The mapping is defined by two functions.  The function of type <code>(String)&#8594;Locale</code> is used when getting the header value.  The function of <code>(Locale)&#8594;String</code> is used when setting the header value.</p>
 </div>
 <div class="paragraph">
-<p>My brain finds that http4k&#8217;s lens declarations read backwards. I would find an API like <code>Header.named("content-language").map(&#8230;&#8203;).optional()</code> easier to understand, but the API is what it is, and it works. As an author I struggle to explain it well (sorry about that!), but as a developer I can define new types of lens very easily and succinctly. And when you use http4k, you define new lenses a <em>lot</em>!</p>
+<p>My brain finds that Http4k&#8217;s lens declarations read backwards. I would find an API like <code>Header.named("content-language").map(&#8230;&#8203;).optional()</code> easier to understand, but the API is what it is, and it works. As an author I struggle to explain it well (sorry about that!), but as a developer I can define new types of lens very easily and succinctly. And when you use Http4k, you define new lenses a <em>lot</em>!</p>
 </div>
 <div class="paragraph">
 <p>With the definition of the CONTENT_LANGUAGE lens, our test compiles, and now fails as we expect:</p>
@@ -1216,7 +1216,7 @@ The <code>lazyOf</code> function in Kotlin&#8217;s standard library actually cre
 <h2 id="routing">6. Routing</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>So far our application ignores the request.  This means that a client can get any URL and get the same text.  In real apps, we need to serve different resources on different URLs and perform different actions depending on the HTTP method and other properties of the request. In http4k, this is done by <em>routing</em> each request to a handler that can serve it.</p>
+<p>So far our application ignores the request.  This means that a client can get any URL and get the same text.  In real apps, we need to serve different resources on different URLs and perform different actions depending on the HTTP method and other properties of the request. In Http4k, this is done by <em>routing</em> each request to a handler that can serve it.</p>
 </div>
 <div class="paragraph">
 <p>In this chapter we extend our Hello World application to serve greetings in different languages on different paths.  We will serve the existing behaviour from a route "/hello/en", and add "/hello/fr" for French, "/hello/de" for German, and so on.  Our paths will use standard ISO 639-1 language codes to identify each language, so we don&#8217;t have to invent our own identifier scheme.</p>
@@ -1272,7 +1272,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 <div class="sect2">
 <h3 id="_routing_requests_to_handlers">6.1. Routing Requests to Handlers</h3>
 <div class="paragraph">
-<p>http4k builds routing rules with the routes function that returns an HttpHandler that chooses which of a collection of handlers should receive each request. The most common routing criteria is by path and method, but http4k can route by path, query parameters, method, header values, and body content.  The routing criteria is defined by — you guessed it — functions, so you can write your own criteria if your application needs more sophisticated routing.</p>
+<p>Http4k builds routing rules with the routes function that returns an HttpHandler that chooses which of a collection of handlers should receive each request. The most common routing criteria is by path and method, but Http4k can route by path, query parameters, method, header values, and body content.  The routing criteria is defined by — you guessed it — functions, so you can write your own criteria if your application needs more sophisticated routing.</p>
 </div>
 <div class="paragraph">
 <p>It&#8217;s easier to explain with an example. We&#8217;ll follow the "copy/paste/refactor" method of extending the app: create a router, copy/paste the existing handler to add more routes, change the new handlers to make the test pass, and then refactor away whatever duplication we created to discover abstractions that better express what the app is doing.  Here&#8217;s the first step:</p>
@@ -1380,7 +1380,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 <p>Applications use these factory functions to define the lenses for their URL paths. Http4k does not define a lens for language tags, so we have to define our own and use it to define a path lens.</p>
 </div>
 <div class="paragraph">
-<p>We can use the lens to define a path template that http4k&#8217;s routing will use to parse the language tag out of the path as it routes the request:</p>
+<p>We can use the lens to define a path template that Http4k&#8217;s routing will use to parse the language tag out of the path as it routes the request:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1418,13 +1418,13 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 <h3 id="_routing_different_methods_to_a_resource">6.3. Routing different methods to a resource</h3>
 <div class="paragraph">
 <p>So far our app only routes by path. Web applications also have to support other HTTP methods.
-To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in http4k in <a href="#authentication">Chapter 16, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="#persistence">Chapter 12, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
+To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in Http4k in <a href="#authentication">Chapter 16, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="#persistence">Chapter 12, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s start by writing a test.  If the app can change the state of the map, we now need to make sure that tests are isolated from one another. Each test needs to start the application with its own map instance, initialised to a known state.  That means the app cannot be a global <em>value</em> that depends on the map as a global variable. It must be created by, you guessed it, a function, that takes the map of greetings as a parameter.</p>
 </div>
 <div class="paragraph">
-<p>IntelliJ can perform this transformation as a sequence of small refactorings in a few keystrokes. If you&#8217;re following along in the Git repository, you&#8217;ll see that&#8217;s how we did the transformation ourselves. But this is a book about learning http4k, not refactoring techniques, so we can jump to the end result.</p>
+<p>IntelliJ can perform this transformation as a sequence of small refactorings in a few keystrokes. If you&#8217;re following along in the Git repository, you&#8217;ll see that&#8217;s how we did the transformation ourselves. But this is a book about learning Http4k, not refactoring techniques, so we can jump to the end result.</p>
 </div>
 <div class="paragraph">
 <p>Our test class instantiates the greetings map and app for each test:</p>
@@ -1562,7 +1562,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;200 OK&gt; but was: &lt;405 M
 </div>
 <div class="paragraph">
 <p>A client&#8217;s language preferences are sent as a priority list of language tags in the Accept-Language header.
-http4k defines a PriorityList type that as operations for matching server capabilities to client preferences,
+Http4k defines a PriorityList type that as operations for matching server capabilities to client preferences,
 and a Header.ACCEPT_LANGUAGE lens that translates between the Accept-Language header and PriorityList&lt;Locale&gt;.</p>
 </div>
 <div class="paragraph">
@@ -1702,7 +1702,7 @@ Caused by: java.lang.NumberFormatException: For input string: "xxx"</code></pre>
 <p>The test starts the app in an HTTP server and uses an HTTP client to talk to it over a socket.</p>
 </div>
 <div class="paragraph">
-<p>This is the first time we&#8217;ve created an HTTP client. In http4k, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="#http-clients">Chapter 13, <em>HTTP Clients</em></a>.</p>
+<p>This is the first time we&#8217;ve created an HTTP client. In Http4k, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="#http-clients">Chapter 13, <em>HTTP Clients</em></a>.</p>
 </div>
 <div class="paragraph">
 <p>The integration test fails with:</p>
@@ -1720,7 +1720,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;400 Bad Request&gt; but was: 
 <div class="paragraph">
 <p>Our application must catch LensFailure exceptions and translate them to the correct response status code.
 However, duplicating that try/catch code in every handler in our application would not be ideal.
-The solution in http4k is <em>filters</em>, and specifically the CatchLensFailure filter.</p>
+The solution in Http4k is <em>filters</em>, and specifically the CatchLensFailure filter.</p>
 </div>
 </div>
 <div class="sect2">
@@ -1761,7 +1761,7 @@ I&#8217;ve refactored the routes into their own function, so that it&#8217;s eas
 <div class="title">Note</div>
 </td>
 <td class="content">
-http4k&#8217;s use of LensFailure exceptions is a design compromise. The type declarations for lenses and the developer experience of using lenses would much more complicated if errors had to be represented in the type of the lens. Therefore, Dave and Ivan took a pragmatic decision to report failures from lenses with exceptions instead of return types. In practice, it works fine despite exceptions not being type checked because the translation is performed in one place, the CatchLensFailure filter, instead of duplicated in every handler.
+Http4k&#8217;s use of LensFailure exceptions is a design compromise. The type declarations for lenses and the developer experience of using lenses would much more complicated if errors had to be represented in the type of the lens. Therefore, Dave and Ivan took a pragmatic decision to report failures from lenses with exceptions instead of return types. In practice, it works fine despite exceptions not being type checked because the translation is performed in one place, the CatchLensFailure filter, instead of duplicated in every handler.
 </td>
 </tr>
 </table>
@@ -1785,7 +1785,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </table>
 </div>
 <div class="paragraph">
-<p>http4k comes with an abundance of useful filters.  Among them:</p>
+<p>Http4k comes with an abundance of useful filters.  Among them:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1807,7 +1807,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </ul>
 </div>
 <div class="paragraph">
-<p>As we saw with lenses, http4k defines filters as members or extensions of global objects to help people find them with autocomplete.</p>
+<p>As we saw with lenses, Http4k defines filters as members or extensions of global objects to help people find them with autocomplete.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1898,7 +1898,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 <h2 id="application-structure">8. Http4k Application Structure</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Our trivial Hello World application has grown to have the typical top-level structure of an http4k application.</p>
+<p>Our trivial Hello World application has grown to have the typical top-level structure of an Http4k application.</p>
 </div>
 <div class="paragraph">
 <p>The <code>app</code> factory function creates the HttpHandlers of the application and defines the routing of requests to those handlers.  The factory function is parameterised by the resources that the application requires: the mutable map of greetings. Operational aspects are composed into the app by a filter stack. The main function initialises the resources, passes them to the factory function to creates the HttpHandler, composes operation aspects into the app via Filters, and starts a Server to run the app.</p>
@@ -2255,7 +2255,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-09 19:10:25 +0100
+Last updated 2025-09-09 19:16:41 +0100
 </div>
 </div>
 </body>

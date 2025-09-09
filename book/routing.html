@@ -602,7 +602,7 @@ pre.rouge .gs {
 <h2 id="routing">6. Routing</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>So far our application ignores the request.  This means that a client can get any URL and get the same text.  In real apps, we need to serve different resources on different URLs and perform different actions depending on the HTTP method and other properties of the request. In http4k, this is done by <em>routing</em> each request to a handler that can serve it.</p>
+<p>So far our application ignores the request.  This means that a client can get any URL and get the same text.  In real apps, we need to serve different resources on different URLs and perform different actions depending on the HTTP method and other properties of the request. In Http4k, this is done by <em>routing</em> each request to a handler that can serve it.</p>
 </div>
 <div class="paragraph">
 <p>In this chapter we extend our Hello World application to serve greetings in different languages on different paths.  We will serve the existing behaviour from a route "/hello/en", and add "/hello/fr" for French, "/hello/de" for German, and so on.  Our paths will use standard ISO 639-1 language codes to identify each language, so we don&#8217;t have to invent our own identifier scheme.</p>
@@ -658,7 +658,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 <div class="sect2">
 <h3 id="_routing_requests_to_handlers">6.1. Routing Requests to Handlers</h3>
 <div class="paragraph">
-<p>http4k builds routing rules with the routes function that returns an HttpHandler that chooses which of a collection of handlers should receive each request. The most common routing criteria is by path and method, but http4k can route by path, query parameters, method, header values, and body content.  The routing criteria is defined by — you guessed it — functions, so you can write your own criteria if your application needs more sophisticated routing.</p>
+<p>Http4k builds routing rules with the routes function that returns an HttpHandler that chooses which of a collection of handlers should receive each request. The most common routing criteria is by path and method, but Http4k can route by path, query parameters, method, header values, and body content.  The routing criteria is defined by — you guessed it — functions, so you can write your own criteria if your application needs more sophisticated routing.</p>
 </div>
 <div class="paragraph">
 <p>It&#8217;s easier to explain with an example. We&#8217;ll follow the "copy/paste/refactor" method of extending the app: create a router, copy/paste the existing handler to add more routes, change the new handlers to make the test pass, and then refactor away whatever duplication we created to discover abstractions that better express what the app is doing.  Here&#8217;s the first step:</p>
@@ -766,7 +766,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 <p>Applications use these factory functions to define the lenses for their URL paths. Http4k does not define a lens for language tags, so we have to define our own and use it to define a path lens.</p>
 </div>
 <div class="paragraph">
-<p>We can use the lens to define a path template that http4k&#8217;s routing will use to parse the language tag out of the path as it routes the request:</p>
+<p>We can use the lens to define a path template that Http4k&#8217;s routing will use to parse the language tag out of the path as it routes the request:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -804,13 +804,13 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 <h3 id="_routing_different_methods_to_a_resource">6.3. Routing different methods to a resource</h3>
 <div class="paragraph">
 <p>So far our app only routes by path. Web applications also have to support other HTTP methods.
-To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in http4k in <a href="authentication.html">Chapter 16, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="persistence.html">Chapter 12, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
+To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in Http4k in <a href="authentication.html">Chapter 16, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="persistence.html">Chapter 12, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s start by writing a test.  If the app can change the state of the map, we now need to make sure that tests are isolated from one another. Each test needs to start the application with its own map instance, initialised to a known state.  That means the app cannot be a global <em>value</em> that depends on the map as a global variable. It must be created by, you guessed it, a function, that takes the map of greetings as a parameter.</p>
 </div>
 <div class="paragraph">
-<p>IntelliJ can perform this transformation as a sequence of small refactorings in a few keystrokes. If you&#8217;re following along in the Git repository, you&#8217;ll see that&#8217;s how we did the transformation ourselves. But this is a book about learning http4k, not refactoring techniques, so we can jump to the end result.</p>
+<p>IntelliJ can perform this transformation as a sequence of small refactorings in a few keystrokes. If you&#8217;re following along in the Git repository, you&#8217;ll see that&#8217;s how we did the transformation ourselves. But this is a book about learning Http4k, not refactoring techniques, so we can jump to the end result.</p>
 </div>
 <div class="paragraph">
 <p>Our test class instantiates the greetings map and app for each test:</p>
@@ -944,7 +944,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;200 OK&gt; but was: &lt;405 M
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-09 19:10:25 +0100
+Last updated 2025-09-09 19:16:41 +0100
 </div>
 </div>
 </body>

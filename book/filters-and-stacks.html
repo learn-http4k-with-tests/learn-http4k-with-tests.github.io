@@ -612,7 +612,7 @@ pre.rouge .gs {
 </div>
 <div class="paragraph">
 <p>A client&#8217;s language preferences are sent as a priority list of language tags in the Accept-Language header.
-http4k defines a PriorityList type that as operations for matching server capabilities to client preferences,
+Http4k defines a PriorityList type that as operations for matching server capabilities to client preferences,
 and a Header.ACCEPT_LANGUAGE lens that translates between the Accept-Language header and PriorityList&lt;Locale&gt;.</p>
 </div>
 <div class="paragraph">
@@ -752,7 +752,7 @@ Caused by: java.lang.NumberFormatException: For input string: "xxx"</code></pre>
 <p>The test starts the app in an HTTP server and uses an HTTP client to talk to it over a socket.</p>
 </div>
 <div class="paragraph">
-<p>This is the first time we&#8217;ve created an HTTP client. In http4k, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="http-clients.html">Chapter 13, <em>HTTP Clients</em></a>.</p>
+<p>This is the first time we&#8217;ve created an HTTP client. In Http4k, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="http-clients.html">Chapter 13, <em>HTTP Clients</em></a>.</p>
 </div>
 <div class="paragraph">
 <p>The integration test fails with:</p>
@@ -770,7 +770,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;400 Bad Request&gt; but was: 
 <div class="paragraph">
 <p>Our application must catch LensFailure exceptions and translate them to the correct response status code.
 However, duplicating that try/catch code in every handler in our application would not be ideal.
-The solution in http4k is <em>filters</em>, and specifically the CatchLensFailure filter.</p>
+The solution in Http4k is <em>filters</em>, and specifically the CatchLensFailure filter.</p>
 </div>
 </div>
 <div class="sect2">
@@ -811,7 +811,7 @@ I&#8217;ve refactored the routes into their own function, so that it&#8217;s eas
 <div class="title">Note</div>
 </td>
 <td class="content">
-http4k&#8217;s use of LensFailure exceptions is a design compromise. The type declarations for lenses and the developer experience of using lenses would much more complicated if errors had to be represented in the type of the lens. Therefore, Dave and Ivan took a pragmatic decision to report failures from lenses with exceptions instead of return types. In practice, it works fine despite exceptions not being type checked because the translation is performed in one place, the CatchLensFailure filter, instead of duplicated in every handler.
+Http4k&#8217;s use of LensFailure exceptions is a design compromise. The type declarations for lenses and the developer experience of using lenses would much more complicated if errors had to be represented in the type of the lens. Therefore, Dave and Ivan took a pragmatic decision to report failures from lenses with exceptions instead of return types. In practice, it works fine despite exceptions not being type checked because the translation is performed in one place, the CatchLensFailure filter, instead of duplicated in every handler.
 </td>
 </tr>
 </table>
@@ -835,7 +835,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </table>
 </div>
 <div class="paragraph">
-<p>http4k comes with an abundance of useful filters.  Among them:</p>
+<p>Http4k comes with an abundance of useful filters.  Among them:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -857,7 +857,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </ul>
 </div>
 <div class="paragraph">
-<p>As we saw with lenses, http4k defines filters as members or extensions of global objects to help people find them with autocomplete.</p>
+<p>As we saw with lenses, Http4k defines filters as members or extensions of global objects to help people find them with autocomplete.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -950,7 +950,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-09 19:10:25 +0100
+Last updated 2025-09-09 19:16:41 +0100
 </div>
 </div>
 </body>
