@@ -1749,7 +1749,7 @@ I&#8217;ve refactored the routes into their own function, so that it&#8217;s eas
 <p>The CatchLensFailure filter is a function. It&#8217;s not an HttpHandler, a function from Request to Response. It&#8217;s a function from HttpHandler to HttpHandler. The filter takes the HttpHandler returned by greetingRoutes as a parameter and returns a new HttpHandler that wraps the call to our app&#8217;s routing in a try/catch block that catches LensFailure exception and returns Response with a 400 Bad Request status.</p>
 </div>
 <div class="paragraph">
-<p>By wrapping this try/catch around the entire app, the filter reports lens failures from <em>any</em> handler in our application into 400 Bad Request responses.</p>
+<p>By wrapping this try/catch around the entire app, the filter reports lens failures from <em>any</em> handler in our application as 400 Bad Request responses.</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="chapters/catch-lens-failure.drawio.svg" alt="CatchLensFailure handler and filter functions"></span></p>
