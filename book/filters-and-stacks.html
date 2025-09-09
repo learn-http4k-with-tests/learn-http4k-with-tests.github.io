@@ -818,7 +818,7 @@ http4k&#8217;s use of LensFailure exceptions is a design compromise. The type de
 <div class="sect2">
 <h3 id="_filters">7.3. Filters</h3>
 <div class="paragraph">
-<p>A filter is a higher-order function of HttpHandler to HttpHandler. It takes an HttpHandler – let&#8217;s call it the "next handler" – and returns a new HttpHander that can perform behaviour before after, or instead of passing the request to the next handler.  The filter handler can modify the request before passing it to the next handler or modify the response from the next handler before returning the response to its caller. It can shortcut request handling by returning a response without ever passing the request to the next handler. It can catch exceptions thrown by the next handler and translate them into responses. Anything a higher-order function can do, a filter can do, because a filter is just a higher-order function.</p>
+<p>A filter, then, is a higher-order function of HttpHandler to HttpHandler. It takes an HttpHandler – let&#8217;s call it the "next handler" – and returns a new HttpHander that can perform behaviour before after, or instead of passing the request to the next handler. The filter handler can modify the request before passing it to the next handler or modify the response from the next handler before returning the response to its caller. It can shortcut request handling by returning a response without ever passing the request to the next handler. It can catch exceptions thrown by the next handler and translate them into responses. Anything a higher-order function can do, a filter can do, because a filter is just a higher-order function.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -850,12 +850,12 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 <p><code>Cors</code> sets headers for cross-origin resource sharing</p>
 </li>
 <li>
-<p><code>RequestTracing</code> adds headers for distributed tracing between services.</p>
+<p><code>RequestTracing</code> traces requests between services.</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>As we saw with lenses, http4k defines filters as members or extensions of global objects to help people find them.</p>
+<p>As we saw with lenses, http4k defines filters as members or extensions of global objects to help people find them with autocomplete.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -872,7 +872,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 <p>ClientFilters: filters that are applicable only to clients</p>
 </li>
 <li>
-<p>Filter: defines one filter, NoOp` that returns its parameter without wrapping any behaviour around it.  This sounds pointless, but is useful when writing conditional expressions that decide whether or not to apply a filter: Filter.NoOp is used for the "not" case.</p>
+<p>Filter: defines one filter, NoOp, that returns its parameter without wrapping any behaviour around it.  This sounds pointless, but is useful when writing conditional expressions that decide whether or not to apply a filter: Filter.NoOp is used for the "not" case.</p>
 </li>
 </ul>
 </div>
