@@ -595,8 +595,11 @@ pre.rouge .gs {
 </li>
 <li><a href="#filters-and-stacks">7. Filters and stacks</a>
 <ul class="sectlevel2">
-<li><a href="#_other_useful_filters">7.1. Other Useful Filters</a></li>
-<li><a href="#_writing_a_filter">7.2. Writing a filter</a></li>
+<li><a href="#_what_happens_when_lenses_fail">7.1. What happens when lenses fail</a></li>
+<li><a href="#_catching_lens_failures">7.2. Catching lens failures</a></li>
+<li><a href="#_filters">7.3. Filters</a></li>
+<li><a href="#_filter_stacks">7.4. Filter Stacks</a></li>
+<li><a href="#_writing_a_filter">7.5. Writing a filter</a></li>
 </ul>
 </li>
 <li><a href="#application-structure">8. Http4k Application Structure</a></li>
@@ -1552,8 +1555,18 @@ org.opentest4j.AssertionFailedError: expected: &lt;200 OK&gt; but was: &lt;405 M
 <div class="sect1">
 <h2 id="filters-and-stacks">7. Filters and stacks</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_what_happens_when_lenses_fail">7.1. What happens when lenses fail</h3>
 <div class="paragraph">
-<p>Implement "proactive content negotiation" via the Accept-Language header. The "/hello" path will select text based on client preferences.  For example:</p>
+<p>The HTTP protocol defines a way for a client to indicate its language preferences and the server to provide information in the language that best meets those preferences. This is known as "proactive content negotiation" in the HTTP specs. Let&#8217;s implement that for our "Hello World" application at the "/hello" path.</p>
+</div>
+<div class="paragraph">
+<p>A client&#8217;s language preferences are sent as a priority list of language tags in the Accept-Language header.
+http4k defines a PriorityList type that as operations for matching server capabilities to client preferences,
+and a Header.ACCEPT_LANGUAGE lens that translates between the Accept-Language header and PriorityList&lt;Locale&gt;.</p>
+</div>
+<div class="paragraph">
+<p>Here&#8217;s a test that describes how proactive content negotiation should work for our app. (Remember, our app supports the English, German, and French languages by default).</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1583,10 +1596,10 @@ org.opentest4j.AssertionFailedError: expected: &lt;200 OK&gt; but was: &lt;405 M
 </div>
 </div>
 <div class="paragraph">
-<p>Note that the test depends on Responses being values and that we can compare them for equality.</p>
+<p>Note that the test takes advantage of Responses being values that we can compare for equality.</p>
 </div>
 <div class="paragraph">
-<p>And here&#8217;s what should happen when content negotiation does not find a language acceptable to the client:</p>
+<p>Here&#8217;s what should happen when content negotiation does not find a language acceptable to the client:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1608,7 +1621,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;200 OK&gt; but was: &lt;405 M
 </div>
 </div>
 <div class="paragraph">
-<p>The following route implements content negotiation.</p>
+<p>The following route implements content negotiation by finding a language in the greetings map that best matches the client&#8217;s preferences:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1629,7 +1642,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;200 OK&gt; but was: &lt;405 M
 </div>
 </div>
 <div class="paragraph">
-<p>You may be wondering, what happens if the Header.ACCEPT_LANGUAGE lens cannot parse the Accept-Language header.
+<p>You may be wondering what happens if the Header.ACCEPT_LANGUAGE lens cannot parse the Accept-Language header.
 Let&#8217;s write a test and see&#8230;&#8203;</p>
 </div>
 <div class="listingblock">
@@ -1686,7 +1699,10 @@ Caused by: java.lang.NumberFormatException: For input string: "xxx"</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>The test creates an HTTP server and client. This is the first time we&#8217;ve created an HTTP client. In http4k}, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="#http-clients">Chapter 13, <em>HTTP Clients</em></a>.</p>
+<p>The test starts the app in an HTTP server and uses an HTTP client to talk to it over a socket.</p>
+</div>
+<div class="paragraph">
+<p>This is the first time we&#8217;ve created an HTTP client. In http4k, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="#http-clients">Chapter 13, <em>HTTP Clients</em></a>.</p>
 </div>
 <div class="paragraph">
 <p>The integration test fails with:</p>
@@ -1699,13 +1715,17 @@ org.opentest4j.AssertionFailedError: expected: &lt;400 Bad Request&gt; but was: 
 </div>
 </div>
 <div class="paragraph">
-<p>The last-ditch exception handler in the server runtime catches the LensFailure thrown from our app and returns a 500 Internal Server Error response to the client. This is not correct: the malformed request is the fault of the client, not the server. The response should be 400 Bad Request. If our app reports an internal server error when a client sends a bad request, a faulty client will keep retrying the request, alerting the engineers on support duty and adding load to our system. Our application must therefore catch LensFailure exceptions and translate them to the correct response status code.</p>
+<p>The last-ditch exception handler in the server runtime has caught the LensFailure thrown from our app and returned a 500 Internal Server Error response to the client. This is not the right behaviour: the malformed request is the fault of the client, not the server, so the response should be 400 Bad Request. If our app reports an internal server error when a client sends a bad request, a faulty client will keep retrying the request. Whoever is on support duty will not be happy! Our application must catch LensFailure exceptions and translate them to the correct response status code.</p>
 </div>
 <div class="paragraph">
-<p>Now, we don&#8217;t want to duplicate that try/catch code in every handler in our application. The solution in http4k is <em>filters</em>, and specifically the CatchLensFailure filter.</p>
+<p>We don&#8217;t want to duplicate that try/catch code in every handler in our application. The solution in http4k is <em>filters</em>, and specifically the CatchLensFailure filter.</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_catching_lens_failures">7.2. Catching lens failures</h3>
 <div class="paragraph">
-<p>Let&#8217;s look at the filter in use, and then examine what the code is doing.</p>
+<p>Let&#8217;s look at the filter in use, and then examine what the code is doing.
+I&#8217;ve refactored the routes into its own function, so that it&#8217;s easier to see how the filter is applied.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1724,13 +1744,10 @@ org.opentest4j.AssertionFailedError: expected: &lt;400 Bad Request&gt; but was: 
 </div>
 </div>
 <div class="paragraph">
-<p>I&#8217;ve refactored the routes out of the app into its own function, so that it&#8217;s easier to see how the filter is applied.</p>
+<p>The CatchLensFailure filter is a function that takes the HttpHandler returned by greetingRoutes as a parameter and returns a new HttpHandler. This new HttpHandler wraps the call to our app&#8217;s routing in a try/catch block that catches LensFailure exception and returns Response with a 400 Bad Request status.</p>
 </div>
 <div class="paragraph">
-<p>A filter is a higher-order function of HttpHandler to HttpHandler. It takes an HttpHandler – let&#8217;s call it the "next handler" – and returns a new HttpHander that delegates to the next handler, and can perform behaviour before or after the call to the next handler.</p>
-</div>
-<div class="paragraph">
-<p>The handler created by the CatchLensFailure filter wraps the call to the next handler in a try/catch block that catches LensFailure exceptions and returns a Response with a 400 Bad Request status code. There are various factory functions for CatchLensFailure that give you control over how the exception is translated into a response, but the default is good enough for our needs.</p>
+<p><span class="image"><img src="chapters/catch-lens-failure.drawio.svg" alt="CatchLensFailure handler and filter functions"></span></p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1739,15 +1756,16 @@ org.opentest4j.AssertionFailedError: expected: &lt;400 Bad Request&gt; but was: 
 <div class="title">Note</div>
 </td>
 <td class="content">
-The LensFailure exception is a design compromise. The type declarations for lenses and the developer experience of using lenses would much more complicated if errors had to be represented in the type of the lens. Therefore, Dave and Ivan took a pragmatic decision to report failures from lenses with exceptions instead of return types. In practice, it works fine despite exceptions not being type checked because the translation is performed in one place, the CatchLensFailure filter, instead of duplicated in every handler.
+http4k&#8217;s use of LensFailure exceptions is a design compromise. The type declarations for lenses and the developer experience of using lenses would much more complicated if errors had to be represented in the type of the lens. Therefore, Dave and Ivan took a pragmatic decision to report failures from lenses with exceptions instead of return types. In practice, it works fine despite exceptions not being type checked because the translation is performed in one place, the CatchLensFailure filter, instead of duplicated in every handler.
 </td>
 </tr>
 </table>
 </div>
+</div>
 <div class="sect2">
-<h3 id="_other_useful_filters">7.1. Other Useful Filters</h3>
+<h3 id="_filters">7.3. Filters</h3>
 <div class="paragraph">
-<p>The handler created by a Filter can modify the request before passing it to the next handler or modify the response from the next handler before returning the response to its caller. It can shortcut request handling by returning a response without ever passing the request to the next handler. It can catch exceptions thrown by the next handler and translate them into responses. Anything a higher-order function can do, a filter can do, because a filter is just a higher-order function.</p>
+<p>A filter is a higher-order function of HttpHandler to HttpHandler. It takes an HttpHandler – let&#8217;s call it the "next handler" – and returns a new HttpHander that can perform behaviour before after, or instead of passing the request to the next handler.  The filter handler can modify the request before passing it to the next handler or modify the response from the next handler before returning the response to its caller. It can shortcut request handling by returning a response without ever passing the request to the next handler. It can catch exceptions thrown by the next handler and translate them into responses. Anything a higher-order function can do, a filter can do, because a filter is just a higher-order function.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1756,7 +1774,7 @@ The LensFailure exception is a design compromise. The type declarations for lens
 <div class="title">Note</div>
 </td>
 <td class="content">
-Filter is defined as a <code>fun interface</code>, not as a function type.  That means you can call a Filter with function call syntax, but not pass it to code that expects a value of a function type. I&#8217;ve no idea why Filter is declared this way, but it&#8217;s not possible to change the declaration to a typealias of a function tyoe without breaking lots of code, so a <code>fun interface</code> it has to stay.
+Filter is defined as a <code>fun interface</code>, not as a function type.  That means you can call a Filter with function call syntax, but not pass it to code that expects a value of a function type. I&#8217;ve no idea why Filter is declared this way, but it&#8217;s not possible to change the declaration to a typealias of a function tyoe without breaking lots of code, so a <code>fun interface</code> it has to stay. If you need to use a Filter as a function, use a reference to its invoke method, like: <code>someFilter::invoke</code>.
 </td>
 </tr>
 </table>
@@ -1784,14 +1802,39 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </ul>
 </div>
 <div class="paragraph">
-<p>Each filter implements one aspect of request processing.  An application composes them together to define the request processing that it needs.</p>
+<p>As we saw with lenses, http4k defines filters as members or extensions of global objects to help people find them.</p>
 </div>
+<div class="ulist">
+<ul>
+<li>
+<p>RequestFilters: filters that apply to requests</p>
+</li>
+<li>
+<p>ResponseFilters: filters that apply to responses</p>
+</li>
+<li>
+<p>ServerFilters: filters that are applicable only to servers</p>
+</li>
+<li>
+<p>ClientFilters: filters that are applicable only to clients</p>
+</li>
+<li>
+<p>Filter: defines one filter, NoOp` that returns its parameter without wrapping any behaviour around it.  This sounds pointless, but is useful when writing conditional expressions that decide whether or not to apply a filter: Filter.NoOp is used for the "not" case.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_filter_stacks">7.4. Filter Stacks</h3>
 <div class="ulist">
 <ul>
 <li>
 <p>Composing filters into stacks</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Each filter implements one aspect of request processing.  An application composes them together to define the request processing that it needs.</p>
 </div>
 <div class="paragraph">
 <p>A typical application stack looks like this:</p>
@@ -1839,7 +1882,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </div>
 </div>
 <div class="sect2">
-<h3 id="_writing_a_filter">7.2. Writing a filter</h3>
+<h3 id="_writing_a_filter">7.5. Writing a filter</h3>
 <div class="paragraph">
 <p>TBD</p>
 </div>
@@ -1933,7 +1976,15 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </div>
 </div>
 <div class="paragraph">
-<p>Personally, I prefer the second approach. It lets me see all the app&#8217;s routes in one place, and I can write exhaustive unit tests for the behaviour of each handler independently of the routing, if I need to.  If the application gets so large that a single routes function becomes impractical, I organise the routes into separate functions that each create the routes for one type of resource.</p>
+<p>Personally, I prefer the second approach because I can see all the app&#8217;s routes in one place. If the application gets so large that a single routes function becomes impractical, I organise the routes into separate functions that each create the routes for one type of resource.</p>
+</div>
+<div class="paragraph">
+<p>As applications grow, it&#8217;s also usual to extract the business logic from the handler into its own function. The handler parses the incoming request, invokes the business logic, and creates the outgoing response. The business logic is free of any HTTP concerns.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="chapters/app-functions.drawio.svg" alt="app functions.drawio">
+</div>
 </div>
 </div>
 </div>
@@ -2199,7 +2250,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-08 19:01:08 +0100
+Last updated 2025-09-09 10:21:02 +0100
 </div>
 </div>
 </body>

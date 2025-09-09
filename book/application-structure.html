@@ -675,7 +675,15 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="paragraph">
-<p>Personally, I prefer the second approach. It lets me see all the app&#8217;s routes in one place, and I can write exhaustive unit tests for the behaviour of each handler independently of the routing, if I need to.  If the application gets so large that a single routes function becomes impractical, I organise the routes into separate functions that each create the routes for one type of resource.</p>
+<p>Personally, I prefer the second approach because I can see all the app&#8217;s routes in one place. If the application gets so large that a single routes function becomes impractical, I organise the routes into separate functions that each create the routes for one type of resource.</p>
+</div>
+<div class="paragraph">
+<p>As applications grow, it&#8217;s also usual to extract the business logic from the handler into its own function. The handler parses the incoming request, invokes the business logic, and creates the outgoing response. The business logic is free of any HTTP concerns.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="chapters/app-functions.drawio.svg" alt="app functions.drawio">
+</div>
 </div>
 </div>
 </div>
@@ -685,7 +693,7 @@ pre.rouge .gs {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-08 19:01:08 +0100
+Last updated 2025-09-09 10:21:02 +0100
 </div>
 </div>
 </body>
