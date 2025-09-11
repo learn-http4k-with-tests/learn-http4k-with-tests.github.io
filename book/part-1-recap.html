@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
              .nav-footer{text-align: center; margin-top: auto;}
              .nav-footer > p > a {white-space: nowrap;}</style>
 </head>
-<body id="error-handling" class="book toc2 toc-left">
+<body id="part-1-recap" class="book toc2 toc-left">
 <div id="header">
 <h1>Learn Http4k With Tests</h1>
 <div class="details">
@@ -451,65 +451,76 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="introduction.html">Introduction</a>
 </li>
 <li><a href="fundamentals].html">I: The Fundamentals of Http4k</a>
-</li>
-<li><a href="realistic.html">II: Production Applications</a>
 <ul class="sectlevel1">
-<li><a href="functional-test.html">10. Writing a Functional Test</a>
+<li><a href="build.html">3. Setting up the Build</a>
 </li>
-<li><a href="json.html">11. JSON serialisation</a>
+<li><a href="server-as-a-function.html">4. Server as a Function</a>
 </li>
-<li><a href="configuration.html">12. Configuration</a>
+<li><a href="lenses.html">5. Headers and Lenses</a>
 </li>
-<li><a href="persistence.html">13. Persistence and transactions</a>
+<li><a href="routing.html">6. Routing</a>
 </li>
-<li><a href="http-clients.html">14. HTTP Clients</a>
+<li><a href="filters-and-stacks.html">7. Filters and stacks</a>
 </li>
-<li><a href="error-handling.html"><span class="toc-current">15. Error handling</span></a>
+<li><a href="application-structure.html">8. Http4k Application Structure</a>
 </li>
-<li><a href="monitoring.html">16. Monitoring and alerting</a>
-</li>
-<li><a href="authentication.html">17. OAuth, Authentication and Authorisation</a>
-</li>
-<li><a href="background-tasks.html">18. Transactional outboxes and background tasks</a>
-</li>
-<li><a href="resilience.html">19. Resilience</a>
-</li>
-<li><a href="contracts.html">20. Contracts and OpenAPI</a>
-</li>
-<li><a href="frontend.html">21. Front End: HTML, HTMX, &amp; templates</a>
-</li>
-<li><a href="multiservice.html">22. Multiservice applications</a>
-</li>
-<li><a href="streaming.html">23. File uploads and streaming content</a>
-</li>
-<li><a href="api-evolution.html">24. API evolution</a>
+<li><a href="part-1-recap.html"><span class="toc-current">9. Recap, and What Next?</span></a>
 </li>
 </ul>
+</li>
+<li><a href="realistic.html">II: Production Applications</a>
 </li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="error-handling">15. Error handling</h2>
+<h2 id="part-1-recap">9. Recap, and What Next?</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>We&#8217;ve now seen all the fundamental mechanisms of Http4k, and how to compose them to build an application.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p>Risks of error handling bugs - retry storms, etc.</p>
+<p>An Http4k application is an HttpHandler, a function from Request to Response</p>
 </li>
 <li>
-<p>Result4k vs exceptions. Result4k for when we want to write code to process the error — eg when we want to control the http status. Exceptions for technical errors, when the top-level error handling filter and 500 status is acceptable.</p>
+<p>Requests and Responses are immutable values</p>
 </li>
 <li>
-<p>Railway oriented programming</p>
+<p>A Server or serverless runtime makes an HttpHandler available on the network.</p>
+</li>
+<li>
+<p>Tests of the application call its HttpHandler directly, and so can be very fast and reliable.</p>
+</li>
+<li>
+<p>A Lens represents a property in an immutable structure, such as a Request or Response. The lens can extract the value of the property and "set" the value of the property, returning a copy of the structure with a different value for the property.</p>
+</li>
+<li>
+<p>Routing selects an HttpHandler from a collection to handle an incoming Request.</p>
+</li>
+<li>
+<p>A Filter is a function from HttpHandler to HttpHandler that composes additional behaviour into an Http4k application.</p>
+</li>
+<li>
+<p>Filters are composed into "stacks" that implement the common operational aspects of the application.</p>
+</li>
+<li>
+<p>A client is also an HttpHandler that your code calls to make outgoing HTTP requests.</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>Everything else builds upon these principles.</p>
+</div>
+<div class="paragraph">
+<p>Our tiny "Hello World" app has let us explore a lot of Http4k! However, to explore more features, we need to build a more realistic application. Go get a cup of tea, and join us again in <a href="realistic.html">Part II, &#8220;Production Applications&#8221;</a>.</p>
 </div>
 </div>
 </div>
 <div class="paragraph nav-footer">
-<p>← Previous: <a href="http-clients.html">HTTP Clients</a> | ↑ Up: <a href="realistic.html">Production Applications</a> | ⌂ Home: <a href="book.html">Learn Http4k With Tests</a> | Next: <a href="monitoring.html">Monitoring and alerting</a> →</p>
+<p>← Previous: <a href="application-structure.html">Http4k Application Structure</a> | ↑ Up: <a href="fundamentals].html">The Fundamentals of Http4k</a> | ⌂ Home: <a href="book.html">Learn Http4k With Tests</a> | Next: <a href="realistic.html">Production Applications</a> →</p>
 </div>
 </div>
 <div id="footer">

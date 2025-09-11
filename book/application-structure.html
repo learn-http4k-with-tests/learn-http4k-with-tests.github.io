@@ -581,6 +581,16 @@ pre.rouge .gs {
 <li><a href="filters-and-stacks.html">7. Filters and stacks</a>
 </li>
 <li><a href="application-structure.html"><span class="toc-current">8. Http4k Application Structure</span></a>
+<ul class="sectlevel2">
+<li><a href="application-structure.html#_separate_source_files">8.1. Separate Source Files</a>
+</li>
+<li><a href="application-structure.html#_separate_functions">8.2. Separate Functions</a>
+</li>
+<li><a href="application-structure.html#_hooray_for_type_aliases">8.3. Hooray for Type Aliases!</a>
+</li>
+</ul>
+</li>
+<li><a href="part-1-recap.html">9. Recap, and What Next?</a>
 </li>
 </ul>
 </li>
@@ -600,8 +610,10 @@ pre.rouge .gs {
 <p>The <code>app</code> factory function creates the HttpHandlers of the application and defines the routing of requests to those handlers.  The factory function is parameterised by the resources that the application requires: the mutable map of greetings. Operational aspects are composed into the app by a filter stack. The main function initialises the resources, passes them to the factory function to creates the HttpHandler, composes operation aspects into the app via Filters, and starts a Server to run the app.</p>
 </div>
 <div class="paragraph">
-<p>However, as we&#8217;ve been building the app, we&#8217;ve written everything in one source file, and all the app&#8217;s handlers in a single function.  That source file is now quite large, and the routes function likewise is too long.  It&#8217;s hard to read: the routing rules do not fit on the screen of my laptop.  If we were working in a team, we would get frequent merge conflicts as team members all make changes to the same function.</p>
+<p>However, we&#8217;ve written everything in one source file, and all the app&#8217;s handlers in a single function.  That source file is now quite large, and the routes function likewise is quite long.  It&#8217;s hard to read: the routing rules do not fit on the screen of my laptop.  If we were working in a team, we would get frequent merge conflicts as team members all make changes to the same function.</p>
 </div>
+<div class="sect2">
+<h3 id="_separate_source_files">8.1. Separate Source Files</h3>
 <div class="paragraph">
 <p>We can split the source into separate files: <code>routes.kt</code> for the app routing and handlers, <code>stack.kt</code> for the filter stack, and <code>main.kt</code> for the app and main function that compose it all together.</p>
 </div>
@@ -610,6 +622,9 @@ pre.rouge .gs {
 <img src="chapters/separate-source-files.png" alt="Organising the app into separate files">
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_separate_functions">8.2. Separate Functions</h3>
 <div class="paragraph">
 <p>We can also extract each handler into its own top-level function.  HttpHandlers are just functions, so this is quick to do with IntelliJ&#8217;s <em>Extract Function to Scope</em> refactoring, and easy to reverse with IntelliJ&#8217;s <em>Inline</em> refactoring if we don&#8217;t like the result. The fast tests will let us quickly confirm that our refactoring has not changed our application&#8217;s behaviour.</p>
 </div>
@@ -688,14 +703,40 @@ pre.rouge .gs {
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_hooray_for_type_aliases">8.3. Hooray for Type Aliases!</h3>
+<div class="paragraph">
+<p>Just for fun, let&#8217;s look at all the kinds of functions we have seen in Http4k so far:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>An HttpHandler is a function from Request to Response</p>
+</li>
+<li>
+<p>A Filter is a function from HttpHandler to HttpHandler, that is a function from a function from Request to Response to a function from Request to Response.</p>
+</li>
+<li>
+<p>The Filter.then method is a function from Filter to Filter, that is, a function from a function from a function from Request to Response to a function from Request to Response to a function from a function from Request to Response to a function from Request to Response.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>I&#8217;m so glad Kotlin has typealiases!</p>
+</div>
+<div class="paragraph">
+<p>However, be warned: IntelliJ&#8217;s Kotlin plugin doesn&#8217;t always preserve typealiases when refactoring. When you extract a function, check the return type of the new function in case IntelliJ has declared it as an unaliased function type. If so, replace it with the typealias, so that your code does not end up looking like the last bullet point above.</p>
+</div>
+</div>
+</div>
 </div>
 <div class="paragraph nav-footer">
-<p>← Previous: <a href="filters-and-stacks.html">Filters and stacks</a> | ↑ Up: <a href="fundamentals].html">The Fundamentals of Http4k</a> | ⌂ Home: <a href="book.html">Learn Http4k With Tests</a> | Next: <a href="realistic.html">Production Applications</a> →</p>
+<p>← Previous: <a href="filters-and-stacks.html">Filters and stacks</a> | ↑ Up: <a href="fundamentals].html">The Fundamentals of Http4k</a> | ⌂ Home: <a href="book.html">Learn Http4k With Tests</a> | Next: <a href="part-1-recap.html">Recap, and What Next?</a> →</p>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-11 10:02:50 +0100
+Last updated 2025-09-11 18:49:23 +0100
 </div>
 </div>
 </body>

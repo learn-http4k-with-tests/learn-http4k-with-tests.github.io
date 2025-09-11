@@ -600,26 +600,33 @@ pre.rouge .gs {
 <li><a href="#_filters_and_stacks">7.3. Filters and Stacks</a></li>
 </ul>
 </li>
-<li><a href="#application-structure">8. Http4k Application Structure</a></li>
+<li><a href="#application-structure">8. Http4k Application Structure</a>
+<ul class="sectlevel2">
+<li><a href="#_separate_source_files">8.1. Separate Source Files</a></li>
+<li><a href="#_separate_functions">8.2. Separate Functions</a></li>
+<li><a href="#_hooray_for_type_aliases">8.3. Hooray for Type Aliases!</a></li>
+</ul>
+</li>
+<li><a href="#part-1-recap">9. Recap, and What Next?</a></li>
 </ul>
 </li>
 <li><a href="#realistic">II: Production Applications</a>
 <ul class="sectlevel1">
-<li><a href="#functional-test">9. Writing a Functional Test</a></li>
-<li><a href="#json">10. JSON serialisation</a></li>
-<li><a href="#configuration">11. Configuration</a></li>
-<li><a href="#persistence">12. Persistence and transactions</a></li>
-<li><a href="#http-clients">13. HTTP Clients</a></li>
-<li><a href="#error-handling">14. Error handling</a></li>
-<li><a href="#monitoring">15. Monitoring and alerting</a></li>
-<li><a href="#authentication">16. OAuth, Authentication and Authorisation</a></li>
-<li><a href="#background-tasks">17. Transactional outboxes and background tasks</a></li>
-<li><a href="#resilience">18. Resilience</a></li>
-<li><a href="#contracts">19. Contracts and OpenAPI</a></li>
-<li><a href="#frontend">20. Front End: HTML, HTMX, &amp; templates</a></li>
-<li><a href="#multiservice">21. Multiservice applications</a></li>
-<li><a href="#streaming">22. File uploads and streaming content</a></li>
-<li><a href="#api-evolution">23. API evolution</a></li>
+<li><a href="#functional-test">10. Writing a Functional Test</a></li>
+<li><a href="#json">11. JSON serialisation</a></li>
+<li><a href="#configuration">12. Configuration</a></li>
+<li><a href="#persistence">13. Persistence and transactions</a></li>
+<li><a href="#http-clients">14. HTTP Clients</a></li>
+<li><a href="#error-handling">15. Error handling</a></li>
+<li><a href="#monitoring">16. Monitoring and alerting</a></li>
+<li><a href="#authentication">17. OAuth, Authentication and Authorisation</a></li>
+<li><a href="#background-tasks">18. Transactional outboxes and background tasks</a></li>
+<li><a href="#resilience">19. Resilience</a></li>
+<li><a href="#contracts">20. Contracts and OpenAPI</a></li>
+<li><a href="#frontend">21. Front End: HTML, HTMX, &amp; templates</a></li>
+<li><a href="#multiservice">22. Multiservice applications</a></li>
+<li><a href="#streaming">23. File uploads and streaming content</a></li>
+<li><a href="#api-evolution">24. API evolution</a></li>
 </ul>
 </li>
 </ul>
@@ -805,7 +812,7 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Passing port zero to the JettyLoom server configuration makes the server use a free port allocated by the operating system, so the port number you will see when you run the server will probably be different to the one in the screenshot. We will look at how to configure the port (and other properties of our application) in <a href="#configuration">Chapter 11, <em>Configuration</em></a>.</p>
+<p>Passing port zero to the JettyLoom server configuration makes the server use a free port allocated by the operating system, so the port number you will see when you run the server will probably be different to the one in the screenshot. We will look at how to configure the port (and other properties of our application) in <a href="#configuration">Chapter 12, <em>Configuration</em></a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -814,7 +821,7 @@ for reviewing early versions of the book and giving helpful feedback.</p>
 <p>An Http4k app is just a function, and Requests and Responses are immutable values. That makes Http4k apps very easy to test.  We don&#8217;t need to spin up a server and use an HTTP client library to send requests to it.  We don&#8217;t need to configure a special "mock" environment for testing with subtle differences to the real thing.  Our tests can just call the function. This makes them fast and reliable.</p>
 </div>
 <div class="paragraph">
-<p>As an application grows, it becomes convenient to write higher-level abstractions that abstract over the HTTP client. Http4k models HTTP clients, like servers, as functions of type HttpHandler. To implement a server-side app you write an HttpHandler that receives a Request parameter and returns a Response. To use a client, you call the HttpHandler, passing a Request parameter and receive a Response as a result. We can compose code that would use an HTTP client to talk to an app directly with the HttpHandler of the app to test the integration of the two, and still get very fast, reliable tests that run entirely in memory.  We will look at this in detail in <a href="#http-clients">Chapter 13, <em>HTTP Clients</em></a>. Given how small our app is at the moment, it is not a problem to call our app directly in the test.</p>
+<p>As an application grows, it becomes convenient to write higher-level abstractions that abstract over the HTTP client. Http4k models HTTP clients, like servers, as functions of type HttpHandler. To implement a server-side app you write an HttpHandler that receives a Request parameter and returns a Response. To use a client, you call the HttpHandler, passing a Request parameter and receive a Response as a result. We can compose code that would use an HTTP client to talk to an app directly with the HttpHandler of the app to test the integration of the two, and still get very fast, reliable tests that run entirely in memory.  We will look at this in detail in <a href="#http-clients">Chapter 14, <em>HTTP Clients</em></a>. Given how small our app is at the moment, it is not a problem to call our app directly in the test.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s a test that verifies our app returns a body of "hello, http4k":</p>
@@ -1423,7 +1430,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 <h3 id="_routing_different_methods_to_a_resource">6.3. Routing different methods to a resource</h3>
 <div class="paragraph">
 <p>So far our app only routes by path. Web applications also have to support other HTTP methods.
-To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in Http4k in <a href="#authentication">Chapter 16, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="#persistence">Chapter 12, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
+To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in Http4k in <a href="#authentication">Chapter 17, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="#persistence">Chapter 13, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s start by writing a test.  If the app can change the state of the map, we now need to make sure that tests are isolated from one another. Each test needs to start the application with its own map instance, initialised to a known state.  That means the app cannot be a global <em>value</em> that depends on the map as a global variable. It must be created by, you guessed it, a function, that takes the map of greetings as a parameter.</p>
@@ -1707,7 +1714,7 @@ Caused by: java.lang.NumberFormatException: For input string: "xxx"</code></pre>
 <p>The test starts the app in an HTTP server and uses an HTTP client to talk to it over a socket.</p>
 </div>
 <div class="paragraph">
-<p>This is the first time we&#8217;ve created an HTTP client. In Http4k, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="#http-clients">Chapter 13, <em>HTTP Clients</em></a>.</p>
+<p>This is the first time we&#8217;ve created an HTTP client. In Http4k, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="#http-clients">Chapter 14, <em>HTTP Clients</em></a>.</p>
 </div>
 <div class="paragraph">
 <p>The integration test fails with:</p>
@@ -1914,8 +1921,10 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 <p>The <code>app</code> factory function creates the HttpHandlers of the application and defines the routing of requests to those handlers.  The factory function is parameterised by the resources that the application requires: the mutable map of greetings. Operational aspects are composed into the app by a filter stack. The main function initialises the resources, passes them to the factory function to creates the HttpHandler, composes operation aspects into the app via Filters, and starts a Server to run the app.</p>
 </div>
 <div class="paragraph">
-<p>However, as we&#8217;ve been building the app, we&#8217;ve written everything in one source file, and all the app&#8217;s handlers in a single function.  That source file is now quite large, and the routes function likewise is too long.  It&#8217;s hard to read: the routing rules do not fit on the screen of my laptop.  If we were working in a team, we would get frequent merge conflicts as team members all make changes to the same function.</p>
+<p>However, we&#8217;ve written everything in one source file, and all the app&#8217;s handlers in a single function.  That source file is now quite large, and the routes function likewise is quite long.  It&#8217;s hard to read: the routing rules do not fit on the screen of my laptop.  If we were working in a team, we would get frequent merge conflicts as team members all make changes to the same function.</p>
 </div>
+<div class="sect2">
+<h3 id="_separate_source_files">8.1. Separate Source Files</h3>
 <div class="paragraph">
 <p>We can split the source into separate files: <code>routes.kt</code> for the app routing and handlers, <code>stack.kt</code> for the filter stack, and <code>main.kt</code> for the app and main function that compose it all together.</p>
 </div>
@@ -1924,6 +1933,9 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 <img src="chapters/separate-source-files.png" alt="Organising the app into separate files">
 </div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_separate_functions">8.2. Separate Functions</h3>
 <div class="paragraph">
 <p>We can also extract each handler into its own top-level function.  HttpHandlers are just functions, so this is quick to do with IntelliJ&#8217;s <em>Extract Function to Scope</em> refactoring, and easy to reverse with IntelliJ&#8217;s <em>Inline</em> refactoring if we don&#8217;t like the result. The fast tests will let us quickly confirm that our refactoring has not changed our application&#8217;s behaviour.</p>
 </div>
@@ -2002,10 +2014,81 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_hooray_for_type_aliases">8.3. Hooray for Type Aliases!</h3>
+<div class="paragraph">
+<p>Just for fun, let&#8217;s look at all the kinds of functions we have seen in Http4k so far:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>An HttpHandler is a function from Request to Response</p>
+</li>
+<li>
+<p>A Filter is a function from HttpHandler to HttpHandler, that is a function from a function from Request to Response to a function from Request to Response.</p>
+</li>
+<li>
+<p>The Filter.then method is a function from Filter to Filter, that is, a function from a function from a function from Request to Response to a function from Request to Response to a function from a function from Request to Response to a function from Request to Response.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>I&#8217;m so glad Kotlin has typealiases!</p>
+</div>
+<div class="paragraph">
+<p>However, be warned: IntelliJ&#8217;s Kotlin plugin doesn&#8217;t always preserve typealiases when refactoring. When you extract a function, check the return type of the new function in case IntelliJ has declared it as an unaliased function type. If so, replace it with the typealias, so that your code does not end up looking like the last bullet point above.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="part-1-recap">9. Recap, and What Next?</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>We&#8217;ve now seen all the fundamental mechanisms of Http4k, and how to compose them to build an application.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>An Http4k application is an HttpHandler, a function from Request to Response</p>
+</li>
+<li>
+<p>Requests and Responses are immutable values</p>
+</li>
+<li>
+<p>A Server or serverless runtime makes an HttpHandler available on the network.</p>
+</li>
+<li>
+<p>Tests of the application call its HttpHandler directly, and so can be very fast and reliable.</p>
+</li>
+<li>
+<p>A Lens represents a property in an immutable structure, such as a Request or Response. The lens can extract the value of the property and "set" the value of the property, returning a copy of the structure with a different value for the property.</p>
+</li>
+<li>
+<p>Routing selects an HttpHandler from a collection to handle an incoming Request.</p>
+</li>
+<li>
+<p>A Filter is a function from HttpHandler to HttpHandler that composes additional behaviour into an Http4k application.</p>
+</li>
+<li>
+<p>Filters are composed into "stacks" that implement the common operational aspects of the application.</p>
+</li>
+<li>
+<p>A client is also an HttpHandler that your code calls to make outgoing HTTP requests.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Everything else builds upon these principles.</p>
+</div>
+<div class="paragraph">
+<p>Our tiny "Hello World" app has let us explore a lot of Http4k! However, to explore more features, we need to build a more realistic application. Go get a cup of tea, and join us again in <a href="#realistic">Part II, &#8220;Production Applications&#8221;</a>.</p>
+</div>
+</div>
 </div>
 <h1 id="realistic" class="sect0">II: Production Applications</h1>
 <div class="sect1">
-<h2 id="functional-test">9. Writing a Functional Test</h2>
+<h2 id="functional-test">10. Writing a Functional Test</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2059,7 +2142,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="json">10. JSON serialisation</h2>
+<h2 id="json">11. JSON serialisation</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2080,7 +2163,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="configuration">11. Configuration</h2>
+<h2 id="configuration">12. Configuration</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2098,7 +2181,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="persistence">12. Persistence and transactions</h2>
+<h2 id="persistence">13. Persistence and transactions</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2122,7 +2205,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="http-clients">13. HTTP Clients</h2>
+<h2 id="http-clients">14. HTTP Clients</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2140,7 +2223,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="error-handling">14. Error handling</h2>
+<h2 id="error-handling">15. Error handling</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2158,7 +2241,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="monitoring">15. Monitoring and alerting</h2>
+<h2 id="monitoring">16. Monitoring and alerting</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2173,13 +2256,13 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="authentication">16. OAuth, Authentication and Authorisation</h2>
+<h2 id="authentication">17. OAuth, Authentication and Authorisation</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="background-tasks">17. Transactional outboxes and background tasks</h2>
+<h2 id="background-tasks">18. Transactional outboxes and background tasks</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2191,25 +2274,25 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="resilience">18. Resilience</h2>
+<h2 id="resilience">19. Resilience</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="contracts">19. Contracts and OpenAPI</h2>
+<h2 id="contracts">20. Contracts and OpenAPI</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="frontend">20. Front End: HTML, HTMX, &amp; templates</h2>
+<h2 id="frontend">21. Front End: HTML, HTMX, &amp; templates</h2>
 <div class="sectionbody">
 
 </div>
 </div>
 <div class="sect1">
-<h2 id="multiservice">21. Multiservice applications</h2>
+<h2 id="multiservice">22. Multiservice applications</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2233,7 +2316,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="streaming">22. File uploads and streaming content</h2>
+<h2 id="streaming">23. File uploads and streaming content</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2245,7 +2328,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 </div>
 <div class="sect1">
-<h2 id="api-evolution">23. API evolution</h2>
+<h2 id="api-evolution">24. API evolution</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -2265,7 +2348,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-11 10:02:50 +0100
+Last updated 2025-09-11 18:49:23 +0100
 </div>
 </div>
 </body>

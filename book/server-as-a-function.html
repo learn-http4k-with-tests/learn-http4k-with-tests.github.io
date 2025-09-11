@@ -592,6 +592,8 @@ pre.rouge .gs {
 </li>
 <li><a href="application-structure.html">8. Http4k Application Structure</a>
 </li>
+<li><a href="part-1-recap.html">9. Recap, and What Next?</a>
+</li>
 </ul>
 </li>
 <li><a href="realistic.html">II: Production Applications</a>
@@ -672,7 +674,7 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="paragraph">
-<p>Passing port zero to the JettyLoom server configuration makes the server use a free port allocated by the operating system, so the port number you will see when you run the server will probably be different to the one in the screenshot. We will look at how to configure the port (and other properties of our application) in <a href="configuration.html">Chapter 11, <em>Configuration</em></a>.</p>
+<p>Passing port zero to the JettyLoom server configuration makes the server use a free port allocated by the operating system, so the port number you will see when you run the server will probably be different to the one in the screenshot. We will look at how to configure the port (and other properties of our application) in <a href="configuration.html">Chapter 12, <em>Configuration</em></a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -681,7 +683,7 @@ pre.rouge .gs {
 <p>An Http4k app is just a function, and Requests and Responses are immutable values. That makes Http4k apps very easy to test.  We don&#8217;t need to spin up a server and use an HTTP client library to send requests to it.  We don&#8217;t need to configure a special "mock" environment for testing with subtle differences to the real thing.  Our tests can just call the function. This makes them fast and reliable.</p>
 </div>
 <div class="paragraph">
-<p>As an application grows, it becomes convenient to write higher-level abstractions that abstract over the HTTP client. Http4k models HTTP clients, like servers, as functions of type HttpHandler. To implement a server-side app you write an HttpHandler that receives a Request parameter and returns a Response. To use a client, you call the HttpHandler, passing a Request parameter and receive a Response as a result. We can compose code that would use an HTTP client to talk to an app directly with the HttpHandler of the app to test the integration of the two, and still get very fast, reliable tests that run entirely in memory.  We will look at this in detail in <a href="http-clients.html">Chapter 13, <em>HTTP Clients</em></a>. Given how small our app is at the moment, it is not a problem to call our app directly in the test.</p>
+<p>As an application grows, it becomes convenient to write higher-level abstractions that abstract over the HTTP client. Http4k models HTTP clients, like servers, as functions of type HttpHandler. To implement a server-side app you write an HttpHandler that receives a Request parameter and returns a Response. To use a client, you call the HttpHandler, passing a Request parameter and receive a Response as a result. We can compose code that would use an HTTP client to talk to an app directly with the HttpHandler of the app to test the integration of the two, and still get very fast, reliable tests that run entirely in memory.  We will look at this in detail in <a href="http-clients.html">Chapter 14, <em>HTTP Clients</em></a>. Given how small our app is at the moment, it is not a problem to call our app directly in the test.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s a test that verifies our app returns a body of "hello, http4k":</p>
@@ -786,7 +788,7 @@ Actual   :[Bearer token-1, Bearer token-2]</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-11 10:02:50 +0100
+Last updated 2025-09-11 18:49:23 +0100
 </div>
 </div>
 </body>

@@ -590,6 +590,8 @@ pre.rouge .gs {
 </li>
 <li><a href="application-structure.html">8. Http4k Application Structure</a>
 </li>
+<li><a href="part-1-recap.html">9. Recap, and What Next?</a>
+</li>
 </ul>
 </li>
 <li><a href="realistic.html">II: Production Applications</a>
@@ -804,7 +806,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;bonjour tout le monde&gt; but
 <h3 id="_routing_different_methods_to_a_resource">6.3. Routing different methods to a resource</h3>
 <div class="paragraph">
 <p>So far our app only routes by path. Web applications also have to support other HTTP methods.
-To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in Http4k in <a href="authentication.html">Chapter 16, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="persistence.html">Chapter 12, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
+To explore routing by method, let&#8217;s allow clients to set and remove the greeting text for each language by using the PUT and DELETE methods.  For now, we will ignore security. We&#8217;ll look at authentication and authorisation in Http4k in <a href="authentication.html">Chapter 17, <em>OAuth, Authentication and Authorisation</em></a> and pretend it is being handled by a service mesh for the time being!  And we&#8217;ll continue to store the greetings in memory.  We look at database persistence in <a href="persistence.html">Chapter 13, <em>Persistence and transactions</em></a>, but will use a mutable map for the time being.</p>
 </div>
 <div class="paragraph">
 <p>Let&#8217;s start by writing a test.  If the app can change the state of the map, we now need to make sure that tests are isolated from one another. Each test needs to start the application with its own map instance, initialised to a known state.  That means the app cannot be a global <em>value</em> that depends on the map as a global variable. It must be created by, you guessed it, a function, that takes the map of greetings as a parameter.</p>
@@ -944,7 +946,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;200 OK&gt; but was: &lt;405 M
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-11 10:02:50 +0100
+Last updated 2025-09-11 18:49:23 +0100
 </div>
 </div>
 </body>
