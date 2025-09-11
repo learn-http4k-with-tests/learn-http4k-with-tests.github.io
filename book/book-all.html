@@ -579,9 +579,9 @@ pre.rouge .gs {
 <li><a href="#_immutability">4.4. Immutability</a></li>
 </ul>
 </li>
-<li><a href="#lenses">5. Headers and Lenses</a>
+<li><a href="#lenses">5. Lenses</a>
 <ul class="sectlevel2">
-<li><a href="#_convenient_extensions_of_request_and_response">5.1. Convenient Extensions of Request and Response</a></li>
+<li><a href="#_convenient_operations_on_request_and_response">5.1. Convenient Operations on Request and Response</a></li>
 <li><a href="#_lenses">5.2. Lenses</a></li>
 <li><a href="#_defining_a_new_header_lens">5.3. Defining a New Header Lens</a></li>
 </ul>
@@ -659,10 +659,13 @@ pre.rouge .gs {
 </div>
 <div class="paragraph">
 <p>Thanks to
+Chris James,
 Dave Denton,
 Jack Bolles,
-and Michael W,
-for reviewing early versions of the book and giving helpful feedback.</p>
+Michael W,
+and
+Daniel Zappold,
+who reviewed early versions of the book and gave lots of helpful feedback.</p>
 </div>
 </div>
 </div>
@@ -915,16 +918,16 @@ Actual   :[Bearer token-1, Bearer token-2]</pre>
 <p>In the Spring code, the object refered to by <em>commonProperties</em> is mutable. The lines that calculate <em>r1</em> and <em>r2</em> mutate that object. State leaks between <em>r1</em> and <em>r2</em> without the data flow being is visible in the source code.</p>
 </div>
 <div class="paragraph">
-<p>Immutability makes data flow in Http4k applications explicit and easy to follow with IntelliJ&#8217;s code navigation tools. There is no mutable state that allows the kind of "spooky action at a distance" possible with the Spring APIs. However, working with immutable data is a lot easier if we are familiar with another fundamental mechanism in Http4k, lenses, so we will look at them next, in <a href="#lenses">Chapter 5, <em>Headers and Lenses</em></a>.</p>
+<p>Immutability makes data flow in Http4k applications explicit and easy to follow with IntelliJ&#8217;s code navigation tools. There is no mutable state that allows the kind of "spooky action at a distance" possible with the Spring APIs. However, working with immutable data is a lot easier if we are familiar with another fundamental mechanism in Http4k, lenses, so we will look at them next, in <a href="#lenses">Chapter 5, <em>Lenses</em></a>.</p>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="lenses">5. Headers and Lenses</h2>
+<h2 id="lenses">5. Lenses</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_convenient_extensions_of_request_and_response">5.1. Convenient Extensions of Request and Response</h3>
+<h3 id="_convenient_operations_on_request_and_response">5.1. Convenient Operations on Request and Response</h3>
 <div class="paragraph">
 <p>Our Hello World app doesn&#8217;t report the content type of the greeting it sends.  It should send a Content-Type header in the response to tell the client that the content is plain text.</p>
 </div>
@@ -2348,7 +2351,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-11 18:49:23 +0100
+Last updated 2025-09-11 19:41:04 +0100
 </div>
 </div>
 </body>
