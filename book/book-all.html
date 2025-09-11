@@ -1577,8 +1577,7 @@ org.opentest4j.AssertionFailedError: expected: &lt;200 OK&gt; but was: &lt;405 M
 </div>
 <div class="paragraph">
 <p>A client&#8217;s language preferences are sent as a priority list of language tags in the Accept-Language header.
-Http4k defines a PriorityList type that as operations for matching server capabilities to client preferences,
-and a Header.ACCEPT_LANGUAGE lens that translates between the Accept-Language header and PriorityList&lt;Locale&gt;.</p>
+Http4k defines a generic PriorityList type that has operations for matching server capabilities to client preferences, and a Header.ACCEPT_LANGUAGE lens that translates between the Accept-Language header and PriorityList&lt;Locale&gt;.</p>
 </div>
 <div class="paragraph">
 <p>Here&#8217;s a test that describes how proactive content negotiation should work for our app. (Remember, our app supports the English, German, and French languages by default).</p>
