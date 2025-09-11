@@ -584,11 +584,7 @@ pre.rouge .gs {
 </li>
 <li><a href="filters-and-stacks.html#_catching_lens_failures">7.2. Catching lens failures</a>
 </li>
-<li><a href="filters-and-stacks.html#_filters">7.3. Filters</a>
-</li>
-<li><a href="filters-and-stacks.html#_filter_stacks">7.4. Filter Stacks</a>
-</li>
-<li><a href="filters-and-stacks.html#_writing_a_filter">7.5. Writing a filter</a>
+<li><a href="filters-and-stacks.html#_filters_and_stacks">7.3. Filters and Stacks</a>
 </li>
 </ul>
 </li>
@@ -818,7 +814,7 @@ Http4k&#8217;s use of LensFailure exceptions is a design compromise. The type de
 </div>
 </div>
 <div class="sect2">
-<h3 id="_filters">7.3. Filters</h3>
+<h3 id="_filters_and_stacks">7.3. Filters and Stacks</h3>
 <div class="paragraph">
 <p>A filter, then, is a higher-order function of HttpHandler to HttpHandler. It takes an HttpHandler – let&#8217;s call it the "next handler" – and returns a new HttpHander that can perform behaviour before after, or instead of passing the request to the next handler. The filter handler can modify the request before passing it to the next handler or modify the response from the next handler before returning the response to its caller. It can shortcut request handling by returning a response without ever passing the request to the next handler. It can catch exceptions thrown by the next handler and translate them into responses. Anything a higher-order function can do, a filter can do, because a filter is just a higher-order function.</p>
 </div>
@@ -835,64 +831,72 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </table>
 </div>
 <div class="paragraph">
-<p>Http4k comes with an abundance of useful filters.  Among them:</p>
+<p>Http4k comes with an abundance of useful filters.
+Just as with lenses, Http4k defines filters as members of global objects, so that they are easy to find them with autocomplete.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><code>CatchAll</code> catches any exception and translates it into a Response, usually with status 500 Internal Service Error, so that your app can control the representation of errors sent to the client.</p>
+<p>RequestFilters: filters that modify requests or perform behaviour that depends on request properties.</p>
 </li>
 <li>
-<p><code>ReportHttpTransaction</code> reports incoming or outgoing requests and responses for observability.</p>
+<p>ResponseFilters: filters that modify responses or perform behaviour that depends on response properties.</p>
 </li>
 <li>
-<p><code>RequestTimer</code> and <code>RequestCounter</code> record metrics.</p>
+<p>ServerFilters: filters that are applicable to requests received by a server.</p>
 </li>
 <li>
-<p><code>Cors</code> sets headers for cross-origin resource sharing</p>
-</li>
-<li>
-<p><code>RequestTracing</code> traces requests between services.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>As we saw with lenses, Http4k defines filters as members or extensions of global objects to help people find them with autocomplete.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>RequestFilters: filters that apply to requests</p>
-</li>
-<li>
-<p>ResponseFilters: filters that apply to responses</p>
-</li>
-<li>
-<p>ServerFilters: filters that are applicable only to servers</p>
-</li>
-<li>
-<p>ClientFilters: filters that are applicable only to clients</p>
+<p>ClientFilters: filters that are applicable to requests made via an HTTP client to another server.</p>
 </li>
 <li>
 <p>Filter: defines one filter, NoOp, that returns its parameter without wrapping any behaviour around it.  This sounds pointless, but is useful when writing conditional expressions that decide whether or not to apply a filter: Filter.NoOp is used for the "not" case.</p>
 </li>
 </ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_filter_stacks">7.4. Filter Stacks</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Composing filters into stacks</p>
-</li>
-</ul>
+<div class="paragraph">
+<p>Modules can declare their own filters as extensions of these objects.</p>
 </div>
 <div class="paragraph">
-<p>Each filter implements one aspect of request processing.  An application composes them together to define the request processing that it needs.</p>
+<p>Each filter performs one aspect of request processing.  An application must compose filters together to define the request processing that it needs. The chain of filters that is applied before the request reaches the application routing is called the application&#8217;s "stack".</p>
 </div>
 <div class="paragraph">
-<p>A typical application stack looks like this:</p>
+<p>Let&#8217;s build a stack for our Hello World application to report the HTTP transactions our app has served and translate exceptions into HTTP responses:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin">        <span class="p">},</span>
+        <span class="s">"/hello/${language}"</span> <span class="n">bind</span> <span class="nf">routes</span><span class="p">(</span>
+            <span class="o">..</span><span class="p">.</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+<span class="k">private</span> <span class="k">fun</span> <span class="nf">greetingResponse</span><span class="p">(</span><span class="n">language</span><span class="p">:</span> <span class="nc">Locale</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">=</span>
+    <span class="nc">Response</span><span class="p">(</span><span class="nc">OK</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">with</span><span class="p">(</span>
+            <span class="nc">Header</span><span class="p">.</span><span class="nc">CONTENT_TYPE</span> <span class="n">of</span> <span class="nc">TEXT_PLAIN</span><span class="p">,</span>
+            <span class="nc">Header</span><span class="p">.</span><span class="nc">CONTENT_LANGUAGE</span> <span class="n">of</span> <span class="n">language</span>
+        <span class="p">)</span>
+        <span class="p">.</span><span class="nf">body</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+
+
+<span class="k">private</span> <span class="k">fun</span> <span class="nf">serverStack</span><span class="p">(</span><span class="n">emit</span><span class="p">:</span> <span class="nc">Events</span><span class="p">):</span> <span class="nc">Filter</span> <span class="p">=</span>
+    <span class="nc">ResponseFilters</span><span class="p">.</span><span class="nc">ReportHttpTransaction</span><span class="p">(</span><span class="n">recordFn</span> <span class="p">=</span> <span class="p">{</span> <span class="n">tx</span> <span class="p">-&gt;</span> <span class="nf">emit</span><span class="p">(</span><span class="nc">Incoming</span><span class="p">(</span><span class="n">tx</span><span class="p">))</span> <span class="p">})</span>
+        <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nc">ServerFilters</span><span class="p">.</span><span class="nc">CatchAll</span><span class="p">())</span>
+        <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nc">ServerFilters</span><span class="p">.</span><span class="nc">CatchLensFailure</span><span class="p">)</span>
+
+<span class="k">fun</span> <span class="nf">app</span><span class="p">(</span><span class="n">emit</span><span class="p">:</span> <span class="nc">Events</span><span class="p">,</span> <span class="n">greetings</span><span class="p">:</span> <span class="nc">MutableMap</span><span class="p">&lt;</span><span class="nc">Locale</span><span class="p">,</span> <span class="nc">String</span><span class="p">&gt;)</span> <span class="p">=</span>
+    <span class="nf">serverStack</span><span class="p">(</span><span class="n">emit</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nf">greetingRoutes</span><span class="p">(</span><span class="n">greetings</span><span class="p">))</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The <code>Filter.then</code> extension function composes two filters, and returns a new filter that applies the first filter before the second. The <code>then</code> function on the returned Filter can be used to compose <em>that</em> filter with another, and so on. This builds a chain of Filters that, when applied to an HttpHandler, creates a chain of HttpHandlers through which requests and responses flow to and from the application.  Requests flow along the <code>then</code> direction, and responses coming back flow in the opposite direction. So in our application, the handler of the ResponseFilters.ReportHttpTransaction is the first to see the request and the last to see the response, and so reports all responses including those caused by exceptions thrown from the app.</p>
+</div>
+<div class="paragraph">
+<p>There is an overload of <code>Filter.then</code> that applies a filter to an HttpHandler. This does exactly the same thing as calling the filter as a function (as you can see by navigating to the definition in IntelliJ), but makes code easier to read when the filter is itself returned from a function, as it is in our case).</p>
+</div>
+<div class="paragraph">
+<p>A complete application stack for a production application composes filters in this order:</p>
 </div>
 <div class="paragraph">
 <p><span class="image"><img src="chapters/server-filter-stack.drawio.svg" alt="Server filter stack"></span></p>
@@ -906,7 +910,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 <p>Debugging, to ensure that we see all traffic during development</p>
 </li>
 <li>
-<p>Tracing, to trace requests between services and associate log events to traces</p>
+<p>Tracing, to trace requests between services and associate log events to traces and spans.</p>
 </li>
 <li>
 <p>Recording metrics, to track how long request processing took</p>
@@ -935,11 +939,8 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </li>
 </ul>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_writing_a_filter">7.5. Writing a filter</h3>
 <div class="paragraph">
-<p>TBD</p>
+<p>The exact filters used will depend on the wider IT infrastructure in which the app runs: the server or serverless runtime in use, the observability and performance monitoring tools in use, and so on.</p>
 </div>
 </div>
 </div>
@@ -950,7 +951,7 @@ Filter is defined as a <code>fun interface</code>, not as a function type.  That
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-09 19:16:41 +0100
+Last updated 2025-09-11 10:02:50 +0100
 </div>
 </div>
 </body>
