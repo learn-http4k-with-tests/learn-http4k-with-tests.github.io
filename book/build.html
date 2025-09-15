@@ -599,25 +599,32 @@ pre.rouge .gs {
 <p>Before we can start writing Http4k web apps, we need a Kotlin build that includes the Http4k dependencies.</p>
 </div>
 <div class="paragraph">
-<p>I&#8217;m assuming that you use Gradle: at the time of writing it&#8217;s the default build tool for Kotlin projects. I&#8217;m also assuming that you&#8217;re writing your Gradle build scripts in Kotlin, not Groovy: at the time of writing it&#8217;s the default syntax for Gradle builds. To get started quickly, you can get IntelliJ to create a new Kotlin JVM project and it will generate a working Gradle build script to which you can add the Http4k dependencies.</p>
+<p>I&#8217;m assuming that you use Gradle: at the time of writing it&#8217;s the default build tool for Kotlin projects. I&#8217;m also assuming that you&#8217;re writing your Gradle build scripts in Kotlin, not Groovy: at the time of writing it&#8217;s the default syntax for Gradle builds. To get started quickly, you can get IntelliJ to create a new Kotlin JVM project. It will generate a working Gradle build script to which you can add the Http4k dependencies.</p>
 </div>
 <div class="paragraph">
 <p>Add the following dependencies to bring in the core Http4k module:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="kotlin"><span class="nf">implementation</span><span class="p">(</span><span class="nf">platform</span><span class="p">(</span><span class="s">"org.http4k:http4k-bom:6.17.0.0"</span><span class="p">))</span>
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="nf">implementation</span><span class="p">(</span><span class="nf">platform</span><span class="p">(</span><span class="s">"org.http4k:http4k-bom:6.18.0.1"</span><span class="p">))</span>
 <span class="nf">implementation</span><span class="p">(</span><span class="s">"org.http4k:http4k-core"</span><span class="p">)</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>If you&#8217;re used to Java frameworks like Spring Boot, you&#8217;ll find that Http4k has a quite different philosophy. Spring Boot follows a "batteries included" approach. It includes a large number of dependencies by default. Its behaviour can depend on what it finds on the classpath at runtime, which makes getting started easy but can lead to surprises as a project grows.  Http4k may be characterised as "batteries readily available".  It has a small core that has no dependencies beyond the Kotlin standard library and lots of optional modules, most of which bring in additional dependencies. Applications explicitly depend <em>only</em> on the modules they actually need. Http4k will not activate features if a module happens to be on the classpath. Applications have to explicitly compose into their application the features they want to use from Http4k&#8217;s modules.</p>
+<p>The Http4k project publishes versions of the toolkit as a "bill of materials" (BOM) that specifies consistent versions of all the Http4k modules and their transitive dependencies.
+In the Gradle build script, wghen you declare a "platform" dependency on a specific version of the BOM, you don&#8217;t need to specify the versions of each Http4k module your project uses.
+When a new Http4k version is released, you only need to change the version of the BOM to upgrade all the Http4k modules in your project, and their transitive dependencies.
+Http4k releases quite frequently (sometimes multiple times a day!) but, because the Http4k API is very narrow, new versions seldom require source code changes, and so upgrades are easy to adopt.</p>
 </div>
 <div class="paragraph">
-<p>The Http4k project publishes versions of the toolkit as a "bill of materials" (BOM) that specifies consistent versions of all the Http4k modules and their transitive dependencies. In your build script, you depend on a specific version of the BOM as a platform dependency, and then you don&#8217;t need to specif the versions of each Http4k module your project uses.  When a new Http4k version is released, you only need to change the version of the BOM to upgrade all the Http4k modules in your project.  Http4k releases quite frequently (sometimes multiple times a day!), but upgrades are easy to adopt and because the Http4k API is very narrow, new versions seldom require source code changes.</p>
+<p>Http4k has a small core module that has no dependencies beyond the Kotlin standard library.
+It also has a lot of optional modules, most of which bring in additional dependencies.
+Http4k applications explicitly depend on modules they actually need.
+This helps minimise the dependency graph, and therefore the toil of staying on top of dependency vulnerabilities and upgrades.
+As we continue through the book, we will add dependencies on other Http4k modules as we need them.</p>
 </div>
 <div class="paragraph">
-<p>As we continue through the book, we will add dependencies on other Http4k modules as needed, but this is enough to be able to write our first Http4k application. However, it&#8217;s not enough for us to be able to <em>test</em> our first Http4k application. For testing, we will add the <code>kotlin-test-junit5</code> module of the Kotlin standard library:</p>
+<p>The core module is enough to be able to write our first Http4k application. However, it&#8217;s not enough for us to be able to <em>test</em> our first Http4k application. For testing, we will add the <code>kotlin-test-junit5</code> module of the Kotlin standard library:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -630,7 +637,7 @@ pre.rouge .gs {
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="kotlin"><span class="nf">plugins</span> <span class="p">{</span>
-    <span class="nf">kotlin</span><span class="p">(</span><span class="s">"jvm"</span><span class="p">)</span> <span class="n">version</span> <span class="s">"2.2.10"</span>
+    <span class="nf">kotlin</span><span class="p">(</span><span class="s">"jvm"</span><span class="p">)</span> <span class="n">version</span> <span class="s">"2.2.20"</span>
 <span class="p">}</span>
 
 <span class="nf">repositories</span> <span class="p">{</span>
@@ -638,7 +645,7 @@ pre.rouge .gs {
 <span class="p">}</span>
 
 <span class="nf">dependencies</span> <span class="p">{</span>
-    <span class="nf">implementation</span><span class="p">(</span><span class="nf">platform</span><span class="p">(</span><span class="s">"org.http4k:http4k-bom:6.17.0.0"</span><span class="p">))</span>
+    <span class="nf">implementation</span><span class="p">(</span><span class="nf">platform</span><span class="p">(</span><span class="s">"org.http4k:http4k-bom:6.18.0.1"</span><span class="p">))</span>
     <span class="nf">implementation</span><span class="p">(</span><span class="s">"org.http4k:http4k-core"</span><span class="p">)</span>
 
     <span class="nf">testImplementation</span><span class="p">(</span><span class="nf">kotlin</span><span class="p">(</span><span class="s">"test-junit5"</span><span class="p">))</span>
@@ -664,7 +671,7 @@ pre.rouge .gs {
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-11 19:41:04 +0100
+Last updated 2025-09-15 18:06:43 +0100
 </div>
 </div>
 </body>
