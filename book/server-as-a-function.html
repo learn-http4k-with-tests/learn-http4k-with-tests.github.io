@@ -641,7 +641,7 @@ pre.rouge .gs {
 <div class="sect2">
 <h3 id="_testing_our_app">4.2. Testing our App</h3>
 <div class="paragraph">
-<p>An Http4k app is just a function, and Requests and Responses are immutable values. That makes Http4k apps very easy to test.  We don&#8217;t need to spin up a server and use an HTTP client library to send requests to it.  We don&#8217;t need to configure a special "mock" environment for testing with subtle differences to the real thing.  Our tests can just call the function. This makes them fast and reliable.</p>
+<p>Because an Http4k app is just a function and Requests and Responses are immutable values, Http4k apps are very easy to test.  We don&#8217;t need to spin up a server and use an HTTP client library to send requests to it.  We don&#8217;t need to configure a special "mock" environment for testing with subtle differences to the real thing.  Our tests can just call the function. This makes them fast and reliable.</p>
 </div>
 <div class="paragraph">
 <p>As an application grows, it becomes convenient to write higher-level abstractions that abstract over the HTTP client. Http4k models HTTP clients, like servers, as functions of type HttpHandler. To implement a server-side app you write an HttpHandler that receives a Request parameter and returns a Response. To use a client, you call the HttpHandler, passing a Request parameter and receive a Response as a result. We can compose code that would use an HTTP client to talk to an app directly with the HttpHandler of the app to test the integration of the two, and still get very fast, reliable tests that run entirely in memory.  We will look at this in detail in <a href="http-clients.html">Chapter 14, <em>HTTP Clients</em></a>. Given how small our app is at the moment, it is not a problem to call our app directly in the test.</p>
@@ -663,7 +663,7 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="paragraph">
-<p>We&#8217;d expect that test to fail: our app actually returns "hello, world". By starting with a failing test, we confirm that our test is actually testing what we want it to, that we&#8217;re not getting false positives, and that the failure diagnostics are good enough.</p>
+<p>We expect that test to fail: our app actually returns "hello, world". By starting with a failing test, we confirm that our test is actually testing what we want it to, that we&#8217;re not getting false positives, and that the failure diagnostics are good enough.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -690,7 +690,7 @@ From now on, we will write the tests first, check they fail for the reason we ex
 <div class="sect2">
 <h3 id="_running_our_app_in_a_server">4.3. Running our App in a Server</h3>
 <div class="paragraph">
-<p>To run our application, we need to launch it in a Server. A Server exposes the app on the network and translates between on-the-wire HTTP communication and Http4k&#8217;s "server as a function" model. The http-core module contains a server implementation that uses the HttpServer class of the JDK, but that&#8217;s only suitable for local development and experiments. For production use, you can choose one of the server modules listed at <a href="https://www.http4k.org/ecosystem/http4k/reference/servers/" class="bare">https://www.http4k.org/ecosystem/http4k/reference/servers/</a> that is a good fit for your production environment.  In this book we will use Jetty with Java&#8217;s virtual threads.</p>
+<p>To run our application, we need to launch it in a Server. A Server exposes the app on the network and translates between on-the-wire HTTP communication and Http4k&#8217;s "server as a function" model. The http-core module contains a server implementation that uses the HttpServer class of the JDK, but that&#8217;s only suitable for local development and experiments. For production use, you can choose one of the server modules listed at <a href="https://www.http4k.org/ecosystem/http4k/reference/servers/" class="bare">https://www.http4k.org/ecosystem/http4k/reference/servers/</a> that is a good fit for your production environment.  In this book we will use Jetty.</p>
 </div>
 <div class="paragraph">
 <p>First, we must add a dependency on the http4k-server-jetty module to our build file:</p>
