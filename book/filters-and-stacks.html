@@ -749,7 +749,20 @@ Caused by: java.lang.NumberFormatException: For input string: "xxx"</code></pre>
 <p>The test starts the app in an HTTP server and uses an HTTP client to talk to it over a socket.</p>
 </div>
 <div class="paragraph">
-<p>This is the first time we&#8217;ve created an HTTP client. In Http4k, a client is an HttpHandler! To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.  To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result. We look at HTTP clients in more detail in <a href="http-clients.html">Chapter 14, <em>HTTP Clients</em></a>.</p>
+<p>This is the first time we&#8217;ve created an HTTP client. In Http4k, a client is an HttpHandler!</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>To write an app, we <em>implement</em> an HttpHandler that receives a Request and returns a Response.</p>
+</li>
+<li>
+<p>To use a client, we <em>call</em> an  HttpHandler, passing in a Request and getting a Response as a result.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>We look at HTTP clients in more detail in <a href="http-clients.html">Chapter 14, <em>HTTP Clients</em></a>.</p>
 </div>
 <div class="paragraph">
 <p>The integration test fails with:</p>
@@ -865,22 +878,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="kotlin">        <span class="p">},</span>
-        <span class="s">"/hello/${language}"</span> <span class="n">bind</span> <span class="nf">routes</span><span class="p">(</span>
-            <span class="o">..</span><span class="p">.</span>
-        <span class="p">)</span>
-    <span class="p">)</span>
-
-<span class="k">private</span> <span class="k">fun</span> <span class="nf">greetingResponse</span><span class="p">(</span><span class="n">language</span><span class="p">:</span> <span class="nc">Locale</span><span class="p">,</span> <span class="n">text</span><span class="p">:</span> <span class="nc">String</span><span class="p">)</span> <span class="p">=</span>
-    <span class="nc">Response</span><span class="p">(</span><span class="nc">OK</span><span class="p">)</span>
-        <span class="p">.</span><span class="nf">with</span><span class="p">(</span>
-            <span class="nc">Header</span><span class="p">.</span><span class="nc">CONTENT_TYPE</span> <span class="n">of</span> <span class="nc">TEXT_PLAIN</span><span class="p">,</span>
-            <span class="nc">Header</span><span class="p">.</span><span class="nc">CONTENT_LANGUAGE</span> <span class="n">of</span> <span class="n">language</span>
-        <span class="p">)</span>
-        <span class="p">.</span><span class="nf">body</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-
-
-<span class="k">private</span> <span class="k">fun</span> <span class="nf">serverStack</span><span class="p">(</span><span class="n">emit</span><span class="p">:</span> <span class="nc">Events</span><span class="p">):</span> <span class="nc">Filter</span> <span class="p">=</span>
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="k">private</span> <span class="k">fun</span> <span class="nf">serverStack</span><span class="p">(</span><span class="n">emit</span><span class="p">:</span> <span class="nc">Events</span><span class="p">):</span> <span class="nc">Filter</span> <span class="p">=</span>
     <span class="nc">ResponseFilters</span><span class="p">.</span><span class="nc">ReportHttpTransaction</span><span class="p">(</span><span class="n">recordFn</span> <span class="p">=</span> <span class="p">{</span> <span class="n">tx</span> <span class="p">-&gt;</span> <span class="nf">emit</span><span class="p">(</span><span class="nc">Incoming</span><span class="p">(</span><span class="n">tx</span><span class="p">))</span> <span class="p">})</span>
         <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nc">ServerFilters</span><span class="p">.</span><span class="nc">CatchAll</span><span class="p">())</span>
         <span class="p">.</span><span class="nf">then</span><span class="p">(</span><span class="nc">ServerFilters</span><span class="p">.</span><span class="nc">CatchLensFailure</span><span class="p">)</span>
@@ -952,7 +950,7 @@ Just as with lenses, Http4k defines filters as members of global objects, so tha
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-15 18:06:43 +0100
+Last updated 2025-09-16 09:03:20 +0100
 </div>
 </div>
 </body>

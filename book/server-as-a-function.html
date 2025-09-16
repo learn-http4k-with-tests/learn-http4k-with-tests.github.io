@@ -576,9 +576,9 @@ pre.rouge .gs {
 <ul class="sectlevel2">
 <li><a href="server-as-a-function.html#_request_response_and_httphandler">4.1. Request, Response and HttpHandler</a>
 </li>
-<li><a href="server-as-a-function.html#_running_our_app_in_a_server">4.2. Running our App in a Server</a>
+<li><a href="server-as-a-function.html#_testing_our_app">4.2. Testing our App</a>
 </li>
-<li><a href="server-as-a-function.html#_testing_our_app">4.3. Testing our App</a>
+<li><a href="server-as-a-function.html#_running_our_app_in_a_server">4.3. Running our App in a Server</a>
 </li>
 <li><a href="server-as-a-function.html#_immutability">4.4. Immutability</a>
 </li>
@@ -639,46 +639,7 @@ pre.rouge .gs {
 </div>
 </div>
 <div class="sect2">
-<h3 id="_running_our_app_in_a_server">4.2. Running our App in a Server</h3>
-<div class="paragraph">
-<p>To run our application, we need to launch it in a Server. A Server exposes the app on the network and translates between on-the-wire HTTP communication and Http4k&#8217;s "server as a function" model. The http-core module contains a server implementation that uses the HttpServer class of the JDK, but that&#8217;s only suitable for local development and experiments. For production use, you can choose one of the server modules listed at <a href="https://www.http4k.org/ecosystem/http4k/reference/servers/" class="bare">https://www.http4k.org/ecosystem/http4k/reference/servers/</a> that is a good fit for your production environment.  In this book we will use Jetty with Java&#8217;s virtual threads.</p>
-</div>
-<div class="paragraph">
-<p>First, we must add a dependency on the http4k-server-jetty module to our build file:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="kotlin"><span class="nf">implementation</span><span class="p">(</span><span class="s">"org.http4k:http4k-server-jetty"</span><span class="p">)</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Now we can write a main function for our app that calls the <code>asServer</code> extension to turn the application handler into a Jetty server, and starts it serving requests.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="kotlin"><span class="k">fun</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">app</span><span class="p">.</span><span class="nf">asServer</span><span class="p">(</span><span class="nc">JettyLoom</span><span class="p">(</span><span class="n">port</span><span class="p">=</span><span class="mi">0</span><span class="p">))</span>
-        <span class="p">.</span><span class="nf">start</span><span class="p">()</span>
-        <span class="p">.</span><span class="nf">also</span> <span class="p">{</span>
-            <span class="nf">println</span><span class="p">(</span><span class="s">"http://localhost:${it.port()}"</span><span class="p">)</span>
-        <span class="p">}</span>
-<span class="p">}</span></code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If we click on the URL that is output (or copy and paste it into the address bar of a web browser) we can see the output of the application:</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="chapters/hello-world-browser.png" alt="A browser displaying the text &quot;hello, world&quot;">
-</div>
-</div>
-<div class="paragraph">
-<p>Passing port zero to the JettyLoom server configuration makes the server use a free port allocated by the operating system, so the port number you will see when you run the server will probably be different to the one in the screenshot. We will look at how to configure the port (and other properties of our application) in <a href="configuration.html">Chapter 12, <em>Configuration</em></a>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_testing_our_app">4.3. Testing our App</h3>
+<h3 id="_testing_our_app">4.2. Testing our App</h3>
 <div class="paragraph">
 <p>An Http4k app is just a function, and Requests and Responses are immutable values. That makes Http4k apps very easy to test.  We don&#8217;t need to spin up a server and use an HTTP client library to send requests to it.  We don&#8217;t need to configure a special "mock" environment for testing with subtle differences to the real thing.  Our tests can just call the function. This makes them fast and reliable.</p>
 </div>
@@ -727,12 +688,51 @@ From now on, we will write the tests first, check they fail for the reason we ex
 </div>
 </div>
 <div class="sect2">
-<h3 id="_immutability">4.4. Immutability</h3>
+<h3 id="_running_our_app_in_a_server">4.3. Running our App in a Server</h3>
 <div class="paragraph">
-<p>Requests and Responses are immutable values. The <code>body</code> operation called by our app does not <em>set</em> the body of the Response but returns a <em>new</em> Response value with the given body.</p>
+<p>To run our application, we need to launch it in a Server. A Server exposes the app on the network and translates between on-the-wire HTTP communication and Http4k&#8217;s "server as a function" model. The http-core module contains a server implementation that uses the HttpServer class of the JDK, but that&#8217;s only suitable for local development and experiments. For production use, you can choose one of the server modules listed at <a href="https://www.http4k.org/ecosystem/http4k/reference/servers/" class="bare">https://www.http4k.org/ecosystem/http4k/reference/servers/</a> that is a good fit for your production environment.  In this book we will use Jetty with Java&#8217;s virtual threads.</p>
 </div>
 <div class="paragraph">
-<p>Compare immutable and here&#8217;s a test of code using the Http4k API to define common properties for Requests and then derive two actual Requests with those common properties.</p>
+<p>First, we must add a dependency on the http4k-server-jetty module to our build file:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="nf">implementation</span><span class="p">(</span><span class="s">"org.http4k:http4k-server-jetty"</span><span class="p">)</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Now we can write a main function for our app that calls the <code>asServer</code> extension to turn the application handler into a Jetty server, and starts it serving requests.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="k">fun</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">app</span><span class="p">.</span><span class="nf">asServer</span><span class="p">(</span><span class="nc">JettyLoom</span><span class="p">(</span><span class="n">port</span><span class="p">=</span><span class="mi">0</span><span class="p">))</span>
+        <span class="p">.</span><span class="nf">start</span><span class="p">()</span>
+        <span class="p">.</span><span class="nf">also</span> <span class="p">{</span>
+            <span class="nf">println</span><span class="p">(</span><span class="s">"http://localhost:${it.port()}"</span><span class="p">)</span>
+        <span class="p">}</span>
+<span class="p">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If we click on the URL that is output (or copy and paste it into the address bar of a web browser) we can see the output of the application:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="chapters/hello-world-browser.png" alt="A browser displaying the text &quot;hello, world&quot;">
+</div>
+</div>
+<div class="paragraph">
+<p>Passing port zero to the JettyLoom server configuration makes the server use a free port allocated by the operating system, so the port number you will see when you run the server will probably be different to the one in the screenshot. We will look at how to configure the port (and other properties of our application) in <a href="configuration.html">Chapter 12, <em>Configuration</em></a>.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_immutability">4.4. Immutability</h3>
+<div class="paragraph">
+<p>Http4k is unusual among web frameworks in that Requests and Responses are immutable values. The <code>body</code> operation called by our app does not <em>set</em> the body of the Response but returns a <em>new</em> Response value that has the given body.</p>
+</div>
+<div class="paragraph">
+<p>To illustrate the difference between immutable and mutable state, here&#8217;s a test of code using the Http4k API to define some common properties for Requests and then derive two actual Requests with those common properties.</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -769,15 +769,39 @@ From now on, we will write the tests first, check they fail for the reason we ex
 </div>
 <div class="listingblock">
 <div class="content">
-<pre>Expected :[Bearer token-1]
-Actual   :[Bearer token-1, Bearer token-2]</pre>
+<pre class="rouge highlight"><code data-lang="text">org.opentest4j.AssertionFailedError: expected: &lt;[Bearer token-1]&gt; but was: &lt;[Bearer token-1, Bearer token-2]&gt;</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>In the Spring code, the object refered to by <em>commonProperties</em> is mutable. The lines that calculate <em>r1</em> and <em>r2</em> mutate that object. State leaks between <em>r1</em> and <em>r2</em> without the data flow being is visible in the source code.</p>
+<p>In the Spring code, the object refered to by <em>commonProperties</em> is mutable. The lines that calculate <em>r1</em> and <em>r2</em> mutate that object. State leaks between <em>r1</em> and <em>r2</em> without the data flow being visible in the source code.</p>
 </div>
 <div class="paragraph">
 <p>Immutability makes data flow in Http4k applications explicit and easy to follow with IntelliJ&#8217;s code navigation tools. There is no mutable state that allows the kind of "spooky action at a distance" possible with the Spring APIs. However, working with immutable data is a lot easier if we are familiar with another fundamental mechanism in Http4k, lenses, so we will look at them next, in <a href="lenses.html">Chapter 5, <em>Lenses</em></a>.</p>
+</div>
+<div class="paragraph">
+<p>However, if you are used to frameworks that rely on mutable state, this mistake is easy make when you are using Http4k:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="kotlin"><span class="kd">val</span> <span class="py">r</span> <span class="p">=</span> <span class="nc">Request</span><span class="p">(</span><span class="nc">GET</span><span class="p">,</span> <span class="s">"http://example.com"</span><span class="p">)</span>
+<span class="n">r</span><span class="p">.</span><span class="nf">header</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span> <span class="s">"Bearer token-1"</span><span class="p">)</span>
+
+<span class="nf">assertEquals</span><span class="p">(</span><span class="nf">listOf</span><span class="p">(</span><span class="s">"Bearer token-1"</span><span class="p">),</span> <span class="n">r</span><span class="p">.</span><span class="nf">headerValues</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">))</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This fails with the error:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="text">org.opentest4j.AssertionFailedError: expected: &lt;[Bearer token-1]&gt; but was: &lt;[]&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The code does nothing with the result of the <code>header</code> method, so it just gets garbage collected.  The Response <em>r</em> is unchanged, and the call to the header method has no effect.</p>
+</div>
+<div class="paragraph">
+<p>By the time you read this book, I expect that Kotlin will report unused function results as errors. The feature was announced at KotlinConf in 2025, and should be landing in the compiler and IDE support soon.</p>
 </div>
 </div>
 </div>
@@ -788,7 +812,7 @@ Actual   :[Bearer token-1, Bearer token-2]</pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-15 18:06:43 +0100
+Last updated 2025-09-16 09:03:20 +0100
 </div>
 </div>
 </body>
